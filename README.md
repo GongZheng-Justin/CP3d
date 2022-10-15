@@ -14,7 +14,7 @@
 &emsp;There are totally 6 solvers in **CP3d**: 
 | Sovler | Note |
 | :--: | :-- |
-| [dem](https://github.com/GongZheng-Justin/dem) | The pure DEM solver | 
+| [dem](https://github.com/GongZheng-Justin/sDEM) | The pure DEM solver | 
 | [channel2nd](https://github.com/GongZheng-Justin/Channel3d) | The pure 2nd order DNS solver | 
 | [channel4th](https://github.com/GongZheng-Justin/ParaTC) | The pure 4th order DNS solver | 
 | channelLPT | One- and two-way DNS-LPT coupling solver | 
