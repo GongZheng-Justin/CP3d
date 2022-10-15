@@ -67,7 +67,6 @@ The following table provides examples to run CP3d after compilation:
 &emsp;The input file examples are stored in the folder `./Input/`.
 
 ## Benchmarks :speedboat:
-Under development ......
 ### One-way coupling
 &emsp;[Particle dispersion in wall-bounded turbulence](https://doi.org/10.1016/j.ijmultiphaseflow.2008.01.009)  
 <img src="./doc/picture/One-way-snapshot.png" width="60%" height="60%" div align=center /><img src="./doc/picture/One-way-benchmark.png" width="38%" height="38%" div align=center />
@@ -76,6 +75,7 @@ Under development ......
 &emsp;[Modification of particle-laden near-wall turbulence](https://doi.org/10.1063/1.4908277)  
 
 ### Interface-unresolved four-way coupling
+&emsp;[Free falling of single particle under gravity](https://doi.org/10.1007/PL00011074) 
 <img src="./doc/picture/Falling_unresolved.png" width="80%" height="80%" div align=center /> 
 
 
