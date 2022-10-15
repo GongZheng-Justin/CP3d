@@ -13,7 +13,7 @@
 ## Overview of the solvers
 &emsp;There are totally 6 solvers in **CP3d**: 
 | Sovler | Note |
-| :--: | :--: |
+| :--: | :-- |
 | dem | The pure DEM solver |
 | channel2nd | The pure 2nd order DNS solver |
 | channel4th | The pure 4th order DNS solver |
