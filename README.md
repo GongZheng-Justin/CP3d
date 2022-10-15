@@ -69,7 +69,7 @@ The following table provides examples to run CP3d after compilation:
 ## Benchmarks :speedboat:
 Under development ......
 ### One-way coupling
-<img src="./doc/picture/One-way-snapshot.png" width="60%" height="60%" div align=center /> <img src="./doc/picture/One-way-benchmark.png" width="60%" height="60%" div align=center /> 
+<img src="./doc/picture/One-way-snapshot.png" width="60%" height="60%" div align=center /> <img src="./doc/picture/One-way-benchmark.png" width="40%" height="40%" div align=center /> 
 
 ### Two-way coupling
 
