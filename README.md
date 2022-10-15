@@ -9,7 +9,7 @@
 * An **averaged lubrication force model** is proposed for the short-range hydrodynamic interaction.
 * The volume integration approach is also modified to adapt the staggered mesh configuration.
 * The resulting solver is able to simulate large scale cases of **billions of grid points** with **millions of moving particles** in interface-resolved four-way regime using only hundreds of computational cores.
-* MPI parallelization by means of pencil distributed decomposition. In order to improve the parallel efficiency, we propose a new 2D pencil-like parallel configuration with totally 6 different pencil arrangements.  
+* MPI parallelization by means of [pencil distributed decomposition](https://github.com/GongZheng-Justin/ParaTC). In order to improve the parallel efficiency, we propose a new 2D pencil-like parallel configuration with totally 6 different pencil arrangements.  
 <img src="./doc/picture/CouplingRegimes.png" width="40%" height="40%" div align=center />          <img src="./doc/picture/Parallel_strategy.png" width="40%" height="40%" div align=center />
 
 ## Overview of the solvers :book:
