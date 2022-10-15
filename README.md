@@ -67,8 +67,15 @@ The following table provides examples to run CP3d after compilation:
 &emsp;The input file examples are stored in the folder `./Input/`.
 
 ## Benchmarks :speedboat:
+Under development ......
 ### One-way coupling
 <img src="./doc/One-way-snapshot.png" width="40%" height="40%" div align=center />
+### Two-way coupling
+
+### Interface-unresolved four-way coupling
+
+### Interface-resolved four-way coupling
+
 
 ## Acknowledgements :clap:
 &emsp;Since Sep 2019, when I finally decided to develop my own CFD-DEM code from scratch, I have learnt quite a lot from the following really kind researchers (**in alphabetical sequence**):
