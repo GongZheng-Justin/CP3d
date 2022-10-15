@@ -54,7 +54,7 @@ mpirun -n 4 ./channel2nd ./Input/CFD_2nd/LidDrivenCavity.prm
 ### Input file
 &emsp;The input file examples are stored in the folder `./Input/`.
 
-## Benchmarks :clap:
+## Benchmarks :speedboat:
 
 
 ## Acknowledgements :clap:
