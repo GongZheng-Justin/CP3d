@@ -69,7 +69,7 @@ The following table provides examples to run CP3d after compilation:
 ## Benchmarks :speedboat:
 Under development ......
 ### One-way coupling
-[Particle dispersion in wall-bounded turbulence](https://doi.org/10.1016/j.ijmultiphaseflow.2008.01.009)
+[Particle dispersion in wall-bounded turbulence](https://doi.org/10.1016/j.ijmultiphaseflow.2008.01.009)  
 <img src="./doc/picture/One-way-snapshot.png" width="60%" height="60%" div align=center /><img src="./doc/picture/One-way-benchmark.png" width="38%" height="38%" div align=center />
 
 ### Two-way coupling
