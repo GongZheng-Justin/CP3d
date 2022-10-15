@@ -36,7 +36,7 @@
 3. choose the correct compiler you use, and the executable you want to compile, following guidances printed in the terminal
 ```
 
-## Usage :book:
+## Usage :blue_book:
 &emsp;After compiling the code successfully, you can run the executable file like that:
 ```
 mpirun -n [np] [exeName] [inputFile1] [inputFile2]
