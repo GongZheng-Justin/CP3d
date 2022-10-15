@@ -55,11 +55,11 @@ The following table provides examples to run CP3d after compilation:
 | Solver | Tying in terminal |
 | :--: | :-- |
 | dem | mpirun -n 8 ./dem ./Input/DEM/DEM_Settling.standard | 
-| channel2nd | The pure 2nd order DNS solver | 
-| channel4th | The pure 4th order DNS solver | 
-| channelLPT | One- and two-way DNS-LPT coupling solver | 
-| channelDEM | Interface-unresolved DNS-DEM coupling solver | 
-| channelACM | DNS-DEM-IBM coupling solver | 
+| channel2nd | mpirun -n 8 ./channel2nd ./Input/CFD_2nd/TurbCha0180_2nd.standard | 
+| channel4th | mpirun -n 8 ./channel4th ./Input/CFD_4th/TurbCha0180_4th.standard | 
+| channelLPT | mpirun -n 8 ./channelLPT ./Input/CFDLPT_OneWay/Channel4th_LPT.oneway ./Input/CFDLPT_OneWay/LPT_Channel4th.oneway | 
+| channelDEM | mpirun -n 8 ./channelDEM ./Input/CFDDEM/ParticleFalling/ChannelDEM_falling.case01 ./Input/CFDDEM/ParticleFalling/DEMChannel_falling.case01 | 
+| channelACM | mpirun -n 8 ./channelACM ./Input/ParticleFalling/SphereCate.cfd1 ./Input/ParticleFalling/SphereCate.acm | 
 
 ### Input file
 &emsp;The input file examples are stored in the folder `./Input/`.
