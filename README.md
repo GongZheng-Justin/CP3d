@@ -10,7 +10,7 @@
 * The volume integration approach is also modified to adapt the staggered mesh configuration.
 * The resulting solver is able to simulate large scale cases of **billions of grid points** with **millions of moving particles** in interface-resolved four-way regime using only hundreds of computational cores.
 * MPI parallelization by means of pencil distributed decomposition. In order to improve the parallel efficiency, we propose a new 2D pencil-like parallel configuration with totally 6 different pencil arrangements.  
-<img src="./doc/CouplingRegimes.png" width="40%" height="40%" div align=center />          <img src="./doc/Parallel_strategy.png" width="40%" height="40%" div align=center />
+<img src="./doc/picture/CouplingRegimes.png" width="40%" height="40%" div align=center />          <img src="./doc/picture/Parallel_strategy.png" width="40%" height="40%" div align=center />
 
 ## Overview of the solvers :book:
 &emsp;There are totally 6 solvers in **CP3d**: 
@@ -23,7 +23,7 @@
 | channelDEM | Interface-unresolved DNS-DEM coupling solver | 
 | channelACM | DNS-DEM-IBM coupling solver | 
 
-<img src="./doc/Overview-6-solvers.png" width="40%" height="40%" div align=center />
+<img src="./doc/picture/Overview-6-solvers.png" width="40%" height="40%" div align=center />
 
 ## Installation :briefcase:
 &emsp;During developing this solver, I often try my best to make it easy-to-understand and easy-to-use. As for compilation, present solver only has the following two prerequisites:
@@ -69,17 +69,17 @@ The following table provides examples to run CP3d after compilation:
 ## Benchmarks :speedboat:
 Under development ......
 ### One-way coupling
-<img src="./doc/One-way-snapshot.png" width="40%" height="40%" div align=center /> 
+<img src="./doc/picture/One-way-snapshot.png" width="40%" height="40%" div align=center /> 
 
 ### Two-way coupling
 
 
 ### Interface-unresolved four-way coupling
-<img src="./doc/Falling_unresolved.png" width="60%" height="60%" div align=center /> 
+<img src="./doc/picture/Falling_unresolved.png" width="60%" height="60%" div align=center /> 
 
 
 ### Interface-resolved four-way coupling
-<img src="./doc/CollideWall_Resolved.png" width="60%" height="60%" div align=center /> 
+<img src="./doc/picture/CollideWall_Resolved.png" width="60%" height="60%" div align=center /> 
 
 
 
