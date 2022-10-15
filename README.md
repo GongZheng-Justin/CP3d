@@ -12,7 +12,7 @@
 
 ## Overview of the solvers
 &emsp;There are totally 6 solvers in **CP3d**:
-![](doc/Overview-6-solvers)
+![](doc/Overview-6-solvers.png)
 
 
 
