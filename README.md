@@ -11,7 +11,8 @@
 * The resulting solver is able to simulate large scale cases of **billions of grid points** with **millions of moving particles** in interface-resolved four-way regime using only hundreds of computational cores.
 
 ## Introduction of the solvers
-&emsp;There are totally 6 solvers in **CP3d**
+&emsp;There are totally 6 solvers in **CP3d**:
+
 
 ## Acknowledgements :clap:
 &emsp;Since Sep 2019, when I finally decided to develop my own CFD-DEM code from scratch, I have learnt quite a lot from the following really kind researchers (**in alphabetical sequence**):
