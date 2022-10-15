@@ -10,8 +10,11 @@
 * The volume integration approach is also modified to adapt the staggered mesh configuration.
 * The resulting solver is able to simulate large scale cases of **billions of grid points** with **millions of moving particles** in interface-resolved four-way regime using only hundreds of computational cores.
 
-## Introduction of the solvers
-&emsp;There are totally 6 solvers in **CP3d**, i.e.,
+## Overview of the solvers
+&emsp;There are totally 6 solvers in **CP3d**:
+![](doc/Overview-6-solvers)
+
+
 
 
 ## Acknowledgements :clap:
