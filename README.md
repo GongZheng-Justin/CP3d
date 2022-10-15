@@ -29,6 +29,13 @@
 * MPI
 * Gfortran/Intel Fortran (Supporting Fortran 2003 or higher version)
 
+&emsp;**FFTW-3.3.9** library has been explicitly included in the directory `./src/ThirdParty/fftw/`, so compiling and additional linking to external FFTW are avoided. After entering the folder `Channe3d-master/` in terminal, you can compile the code as follows:
+```
+1. chmod a+x ./mymake.sh
+2. ./mymake.sh
+3. choose the correct compiler you use, and the executable you want to compile, following guidances printed in the terminal
+```
+
 ## Acknowledgements :clap:
 &emsp;Since Sep 2019, when I finally decided to develop my own CFD-DEM code from scratch, I have learnt quite a lot from the following really kind researchers (**in alphabetical sequence**):
 
