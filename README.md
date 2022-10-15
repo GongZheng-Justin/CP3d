@@ -75,12 +75,11 @@ Under development ......
 
 
 ### Interface-unresolved four-way coupling
-<img src="./doc/picture/Falling_unresolved.png" width="60%" height="60%" div align=center /> 
+<img src="./doc/picture/Falling_unresolved.png" width="80%" height="80%" div align=center /> 
 
 
 ### Interface-resolved four-way coupling
-<img src="./doc/picture/CollideWall_Resolved.png" width="60%" height="60%" div align=center /> 
-
+<img src="./doc/picture/CollideWall_Resolved.png" width="50%" height="50%" div align=center /> 
 
 
 ## Acknowledgements :clap:
