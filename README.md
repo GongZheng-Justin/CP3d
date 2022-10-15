@@ -8,3 +8,4 @@
 * In order to improve the numerical accuracy of the computational **Basset history force**, a third-order exponential approximation method is proposed in interface-unresolved four-way regime.
 * An **averaged lubrication force model** is proposed for the short-range hydrodynamic interaction.
 * The volume integration approach is also modified to adapt the staggered mesh configuration.
+* The resulting solver is able to simulate large scale cases of **billions of grid points** with **millions of moving particles** in interface-resolved four-way regime using only hundreds of computational cores.
