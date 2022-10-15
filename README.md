@@ -13,7 +13,7 @@
 ## Overview of the solvers
 &emsp;There are totally 6 solvers in **CP3d**: 
 
-<center><img src="./doc/Overview-6-solvers.png" width="40%"><center>
+<center><img src="./doc/Overview-6-solvers.png" width="40%"></center>
 
 
 ## Acknowledgements :clap:
