@@ -49,7 +49,7 @@ mpirun -n [np] [exeName] [inputFile1] [inputFile2]
 
 &emsp;For instance, if you want to run the lid-driven cavity case, you can type the following words in your terminal:
 ```
-mpirun -n 4 ./channel2nd ./Input/LidDrivenCavity.prm
+mpirun -n 4 ./channel2nd ./Input/CFD_2nd/LidDrivenCavity.prm
 ```
 ### Input file
 &emsp;The input file examples are stored in the folder `./Input/`.
