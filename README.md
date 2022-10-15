@@ -14,6 +14,11 @@
 &emsp;There are totally 6 solvers in **CP3d**: 
 
 <img src="./doc/Overview-6-solvers.png" width="40%" height="40%" div align=center />
+
+| Sovler | Note |
+| :-- | :-- |
+| dem | The pure DEM solver |
+
 * dem:
 * channel2nd
 * channel4th
