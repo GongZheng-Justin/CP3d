@@ -80,9 +80,8 @@ Under development ......
 
 ### Interface-resolved four-way coupling
 <img src="./doc/picture/sphereQ.png" width="45%" height="45%" div align=center /><img src="./doc/picture/Q_JiPOF2013.png" width="45%" height="45%" div align=center /> 
-
-
 <img src="./doc/picture/CollideWall_Resolved.png" width="45%" height="45%" div align=center />
+
 ## Acknowledgements :clap:
 &emsp;Since Sep 2019, when I finally decided to develop my own CFD-DEM code from scratch, I have learnt quite a lot from the following really kind researchers (**in alphabetical sequence**):
 
