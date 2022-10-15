@@ -80,8 +80,11 @@ The following table provides examples to run CP3d after compilation:
 
 
 ### Interface-resolved four-way coupling
+&emsp;(1) Drag coefficient of uniform flow past a spherical particle 
+&emsp;[Wet head-on particle-wall collision](https://doi.org/10.1017/jfm.2011.461) 
+<img src="./doc/picture/Drag_coeffcient.png" width="45%" height="45%" div align=center /><img src="./doc/picture/CollideWall_Resolved.png" width="45%" height="45%" div align=center />  
 <img src="./doc/picture/sphereQ.png" width="45%" height="45%" div align=center /><img src="./doc/picture/Q_JiPOF2013.png" width="45%" height="45%" div align=center /> 
-<img src="./doc/picture/CollideWall_Resolved.png" width="45%" height="45%" div align=center />
+
 
 ## Acknowledgements :clap:
 &emsp;Since Sep 2019, when I finally decided to develop my own CFD-DEM code from scratch, I have learnt quite a lot from the following really kind researchers (**in alphabetical sequence**):
