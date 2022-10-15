@@ -29,7 +29,7 @@
 * MPI
 * Gfortran/Intel Fortran (Supporting Fortran 2003 or higher version)
 
-&emsp;**FFTW-3.3.9** library has been explicitly included in the directory `./src/ThirdParty/fftw/`, but it is strongly recommended to recomplied **FFTW-3.3.9** for the first use. After entering the folder `CP3d-master/` in terminal, you can compile the code as follows:
+&emsp;**FFTW-3.3.9** library has been explicitly included in the directory `./src/ThirdParty/fftw/`, but it is strongly recommended to recomplied FFTW-3.3.9 for the first use. After entering the folder `CP3d-master/` in terminal, you can compile the code as follows:
 ```
 1. chmod a+x ./mymake.sh
 2. ./mymake.sh
