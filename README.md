@@ -69,7 +69,7 @@ The following table provides examples to run CP3d after compilation:
 ## Benchmarks :speedboat:
 Under development ......
 ### One-way coupling
-<img src="./doc/picture/One-way-snapshot.png" width="40%" height="40%" div align=center /> 
+<img src="./doc/picture/One-way-snapshot.png" width="50%" height="50%" div align=center /> 
 
 ### Two-way coupling
 
@@ -79,7 +79,7 @@ Under development ......
 
 
 ### Interface-resolved four-way coupling
-<img src="./doc/picture/CollideWall_Resolved.png" width="50%" height="50%" div align=center /> 
+<img src="./doc/picture/CollideWall_Resolved.png" width="45%" height="45%" div align=center /> 
 
 
 ## Acknowledgements :clap:
