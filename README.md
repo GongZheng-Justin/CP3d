@@ -69,10 +69,11 @@ The following table provides examples to run CP3d after compilation:
 ## Benchmarks :speedboat:
 ### One-way coupling
 * [Particle dispersion in wall-bounded turbulence](https://doi.org/10.1016/j.ijmultiphaseflow.2008.01.009)  
-<img src="./doc/picture/One-way-snapshot.png" width="60%" height="60%" div align=center /><img src="./doc/picture/One-way-benchmark.png" width="38%" height="38%" div align=center />
+<img src="./doc/picture/particle_disperse_One-way_snapshot.png" width="60%" height="60%" div align=center /><img src="./doc/picture/particle_disperse_One-way_statistics.png" width="38%" height="38%" div align=center />
 
 ### Two-way coupling
 * [Modification of particle-laden near-wall turbulence](https://doi.org/10.1063/1.4908277)  
+<img src="./doc/picture/modification_Two_way_near_wall_turbulence_statistics.png" width="60%" height="60%" div align=center />
 
 ### Interface-unresolved four-way coupling
 * [Free falling of single particle under gravity](https://doi.org/10.1007/PL00011074) 
