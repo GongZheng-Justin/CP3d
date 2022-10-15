@@ -23,6 +23,12 @@
 
 <img src="./doc/Overview-6-solvers.png" width="40%" height="40%" div align=center />
 
+## Installation :briefcase:
+&emsp;During developing this solver, I often try my best to make it easy-to-understand and easy-to-use. As for compilation, present solver only has the following two prerequisites:
+
+* MPI
+* Gfortran/Intel Fortran (Supporting Fortran 2003 or higher version)
+
 ## Acknowledgements :clap:
 &emsp;Since Sep 2019, when I finally decided to develop my own CFD-DEM code from scratch, I have learnt quite a lot from the following really kind researchers (**in alphabetical sequence**):
 
