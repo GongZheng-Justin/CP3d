@@ -19,13 +19,10 @@
 | :--: | :--: |
 | dem | The pure DEM solver |
 | channel2nd | The pure 2nd order DNS solver |
-
-* dem:
-* channel2nd
-* channel4th
-* channelLPT
-* channelDEM
-* channelACM
+| channel4th | The pure 4th order DNS solver |
+| channelLPT | One- and two-way DNS-LPT coupling solver |
+| channelDEM | Interface-unresolved DNS-DEM coupling solver |
+| channelACM | DNS-DEM-IBM coupling solver |
 
 ## Acknowledgements :clap:
 &emsp;Since Sep 2019, when I finally decided to develop my own CFD-DEM code from scratch, I have learnt quite a lot from the following really kind researchers (**in alphabetical sequence**):
