@@ -1,0 +1,66 @@
+#=======================================================================
+# Makefile example --Zheng Gong, 2020-03-04(yy/mm/dd)
+#=======================================================================
+CMP     =  gcc_MPI#intel_MPI #intel_serial #gcc_serial
+exeName =  channel2nd
+CFD_DEFS_Add =#-DFFTW_1D
+
+# ============================ CFD part ============================
+# Choose pre-processing options
+#   -DOverWriteFFT
+#   -DSaveNode
+#   -DFFTW_1D
+# CFD options
+
+CFD_dir    =  ./CFD_2nd/
+CFDEdir    =  ./CFD_2nd/
+CFDEDEFS   = -DSAVE_SINGLE
+
+CFD_DEFS   = -DOverWriteFFT -DSaveNode
+CFD_DEFS  += $(CFD_DEFS_Add)
+
+CFD_inc    = -I./ThirdParty/fftw/
+CFD_lib    = -L./ThirdParty/fftw/ -lfftw3 -lm
+    
+# CFD source files
+SrcT   := m_Decomp2d.f90
+CFDEsrc:= $(addprefix $(CFDEdir), ${SrcT})
+
+SrcT   := m_TypeDef.f90 m_LogInfo.f90 m_Timer.f90 m_Parameters.f90 m_Variables.f90 m_MeshAndMetries.f90 \
+          m_BC_and_Halo.f90 m_Tools.f90 m_LESModels.f90 m_TScheme.f90 m_FlowType_Channel.f90            \
+          m_FlowType_TGVortex.f90 m_FlowType_AddedNew.f90 m_FlowCase.f90 m_Poisson.f90 m_IOAndVisu.f90  \
+          m_ChannelSystem.f90 main.f90
+CFD_src:= $(addprefix $(CFD_dir), ${SrcT})
+
+#-----------------------------------------------------------------------
+# Normally no need to change anything below
+#-----------------------------------------------------------------------
+ifeq ($(CMP),intel_MPI)
+  FortC = mpiifort
+  CFLAG = -fpp -O3 -mcmodel=large -fp-model fast=2#-ipo -xSSE4.2 -axAVX,CORE-AVX-I,CORE-AVX2
+else ifeq ($(CMP),intel_serial)
+  FortC = ifort
+  CFLAG = -fpp -O3 -mcmodel=large -fp-model fast=2#-ipo -xSSE4.2 -axAVX,CORE-AVX-I,CORE-AVX2
+else ifeq ($(CMP),gcc_MPI)
+  FortC = mpif90
+  CFLAG = -cpp -O3 -Warray-bounds -fbacktrace -g -ffree-line-length-none -mcmodel=large -funroll-loops -floop-optimize
+else ifeq ($(CMP),gcc_serial) 
+  FortC = gfortran
+  CFLAG = -cpp -O3 -Warray-bounds -fbacktrace -g -ffree-line-length-none -mcmodel=large -funroll-loops -floop-optimize
+endif
+
+all: $(exeName)
+CFDEobj  = $(CFDEsrc:%.f90=%.o)
+CFD_obj  = $(CFD_src:%.f90=%.o)
+$(exeName):$(CFDEobj) $(CFD_obj)
+	         $(FortC) $(CFLAG) -o  $@ $(CFDEobj) $(CFD_obj) $(CFD_lib)
+$(CFDEobj):$(CFDEdir)%.o :$(CFDEdir)%.f90
+	         $(FortC) $(CFLAG) $(CFDEDEFS) -c $<
+	         @ mv $(@F) ${CFDEdir}
+$(CFD_obj):%.o : %.f90
+	         $(FortC) $(CFLAG) $(CFD_inc) $(CFD_DEFS) -c $<
+	         @ mv $(@F) ${CFD_dir}
+
+.PHONY: clean
+clean:
+	rm -fr  *.o *.mod $(exeName) $(CFD_dir)*.o $(CFDEdir)*.o
