@@ -12,7 +12,7 @@
 
 ## Overview of the solvers :book:
 &emsp;There are totally 6 solvers in **CP3d**: 
-| Sovler | Note |
+| Solver | Note |
 | :--: | :-- |
 | [dem](https://github.com/GongZheng-Justin/sDEM) | The pure DEM solver | 
 | [channel2nd](https://github.com/GongZheng-Justin/Channel3d) | The pure 2nd order DNS solver | 
@@ -51,6 +51,16 @@ mpirun -n [np] [exeName] [inputFile1] [inputFile2]
 ```
 mpirun -n 4 ./channel2nd ./Input/CFD_2nd/LidDrivenCavity.prm
 ```
+The following table provides examples to run CP3d after compilation:
+| Solver | Tying in terminal |
+| :--: | :-- |
+| dem | mpirun -n 8 ./dem ./Input/DEM/DEM_Settling.standard | 
+| channel2nd | The pure 2nd order DNS solver | 
+| channel4th | The pure 4th order DNS solver | 
+| channelLPT | One- and two-way DNS-LPT coupling solver | 
+| channelDEM | Interface-unresolved DNS-DEM coupling solver | 
+| channelACM | DNS-DEM-IBM coupling solver | 
+
 ### Input file
 &emsp;The input file examples are stored in the folder `./Input/`.
 
