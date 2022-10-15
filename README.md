@@ -36,6 +36,24 @@
 3. choose the correct compiler you use, and the executable you want to compile, following guidances printed in the terminal
 ```
 
+## Usage :book:
+&emsp;After compiling the code successfully, you can run the executable file like that:
+```
+mpirun -n [np] [exeName] [inputFile1] [inputFile2]
+```
+&emsp;Here:
+* `np` denotes the number of processors you use
+* `exeName` stands for specific executable file name, namely `channel2nd` or `channel4th`
+* `inputFile1` is the name string for the 1st input parameter file  
+* `inputFile2` is the name string for the 2nd input parameter file, if any
+
+&emsp;For instance, if you want to run the lid-driven cavity case, you can type the following words in your terminal:
+```
+mpirun -n 4 ./channel2nd ./Input/LidDrivenCavity.prm
+```
+### Input file
+&emsp;The input file examples are stored in the folder `./Input/`.
+
 ## Acknowledgements :clap:
 &emsp;Since Sep 2019, when I finally decided to develop my own CFD-DEM code from scratch, I have learnt quite a lot from the following really kind researchers (**in alphabetical sequence**):
 
