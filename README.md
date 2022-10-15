@@ -80,8 +80,8 @@ The following table provides examples to run CP3d after compilation:
 
 
 ### Interface-resolved four-way coupling
-&emsp;(1) Drag coefficient of uniform flow past a spherical particle 
-&emsp;[Wet head-on particle-wall collision](https://doi.org/10.1017/jfm.2011.461) 
+&emsp;(1) Drag coefficient of uniform flow past a spherical particle   
+&emsp;(2) [Wet head-on particle-wall collision](https://doi.org/10.1017/jfm.2011.461) 
 <img src="./doc/picture/Drag_coeffcient.png" width="35%" height="35%" div align=center /><img src="./doc/picture/CollideWall_Resolved.png" width="45%" height="45%" div align=center />  
 <img src="./doc/picture/sphereQ.png" width="45%" height="45%" div align=center /><img src="./doc/picture/Q_JiPOF2013.png" width="45%" height="45%" div align=center /> 
 
