@@ -33,7 +33,7 @@
   ilast =  700           ! Last iteration
 
   ! Numerical scheme options
-  ischeme = 1                 ! (1=AB2, 2=RK3)
+  ischeme = 1                 ! (1=AB2, 2=RK2, 3=RK3)
   IsImplicit= 1               ! (0=full explicit, 1=partial implicit, 2=full implicit)
   FFTW_plan_type = 1          ! (1=FFTW_MEASURE,  2=FFTW_ESTIMATE)
 
