@@ -14,7 +14,7 @@
 
 ## How to cite **CP3d**?
 [1] Z. Gong, Z. Wu, C. An, B. Zhang, X. Fu, CP3d: A comprehensive Euler-Lagrange solver for direct numerical simulation of particle-laden flows, In preparation.   
-[2] Z. Gong, G. Deng, C. An, Z. Wu, X. Fu, A high order finite difference solver for simulations of turbidity currents with high parallel efficiency, Computers and Mathematics with Applications, 2022;128:21-33, https://doi.org/10.1016/j.camwa.2022.09.024. 
+[2] Z. Gong, G. Deng, C. An, Z. Wu, X. Fu, A high order finite difference solver for simulations of turbidity currents with high parallel efficiency, Computers and Mathematics with Applications, 2022;128:21-33, https://doi.org/10.1016/j.camwa.2022.09.024.   
 [3] Z. Gong and X. Fu, A pencil distributed direct numerical simulation solver with versatile treatments for viscous term, Computers and Mathematics with Applications, 2021;100:141-151, https://doi.org/10.1016/j.camwa.2021.09.003.
 
 ## Overview of the solvers :book:
