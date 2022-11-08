@@ -12,6 +12,10 @@
 * MPI parallelization by means of [pencil distributed decomposition](https://github.com/GongZheng-Justin/ParaTC). In order to improve the parallel efficiency, we propose a new 2D pencil-like parallel configuration with totally 6 different pencil arrangements.  
 <img src="./doc/picture/Parallel_strategy.png" width="50%" height="50%" div align=center /><img src="./doc/picture/CouplingRegimes.png" width="50%" height="50%" div align=center />
 
+## How to cite **CP3d**?
+
+[3] Z. Gong and X. Fu, A pencil distributed direct numerical simulation solver with versatile treatments for viscous term, Computers and Mathematics with Applications, 2021;100:141-151, https://doi.org/10.1016/j.camwa.2021.09.003.
+
 ## Overview of the solvers :book:
 &emsp;There are totally 6 solvers in **CP3d**: 
 | Solver | Note |
