@@ -16,7 +16,6 @@
   RunName  = "OneWay2nd"         ! Run name
   ResultsDir  = "./LPT/Results2nd/" ! Result directory
   RestartDir = "./LPT/Restart/"  ! Restart directory
-  SaveVisuLPT   = 10000          ! Output visulizing file frequency
   Cmd_LFile_Freq  = 200          ! Report frequency in the terminal is 500 time step
   LF_file_lvl     = 5            ! Logfile report level 
   LF_cmdw_lvl     = 3            ! Terminal report level
