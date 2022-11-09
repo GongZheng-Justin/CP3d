@@ -382,8 +382,8 @@ contains
     real(RK)::prx,pry,prz,SumXDir,SumYDir,SumZDir,RatioXc(0:2),RatioYc(0:2),RatioZc(0:2),RatioXp(0:2),RatioYp(0:2),RatioZp(0:2)
 
 #ifdef CFDSecondOrder
-    call myupdate_halo(ux, mb1, hi_ux_interp)
-    call myupdate_halo(uz, mb1, hi_uz_interp)
+    call update_halo(ux, mb1, hi_ux_interp)
+    call update_halo(uz, mb1, hi_uz_interp)
 #endif
     nlocal=GPrtcl_list%nlocal
     DO pid=1,nlocal
