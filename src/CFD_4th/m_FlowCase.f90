@@ -151,7 +151,7 @@ contains
           ux(ic,jc,kc) = ux(ic,jc,kc)+ 3.0_RK*ubulk*(ybar-0.5_RK*ybar*ybar)
           uzmean(jc) = uzmean(jc)+ uz(ic,jc,kc)
 #ifdef ScalarFlow
-          if(ScalarBcOption(1)==1 .and. ScalarBcOption(2)==1) then
+          if(ScalarBcOption(1)==-1 .and. ScalarBcOption(2)==-1) then
             scalar(ic,jc,kc)=ScalarBcValues(1) + yc(jc)/yly*(ScalarBcValues(2)-ScalarBcValues(1))
           endif
 #endif
