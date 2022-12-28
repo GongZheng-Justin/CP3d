@@ -34,7 +34,7 @@
   iCFL = 1               ! Use CFL condition to change time step dynamically( 1: yes, 2:no ).
   CFLc = 1.5             ! CFL parameter
   ifirst= 1              ! First iteration
-  ilast = 120000         ! Last iteration
+  ilast = 180000         ! Last iteration
 
   ! Numerical scheme options
   ischeme = 3                 ! (1=AB2, 2=RK2, 3=RK3)
