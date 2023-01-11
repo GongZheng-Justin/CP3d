@@ -91,7 +91,7 @@ contains
 #endif
       GPrtcl_PosR(pid)=GPrtcl_PosR(pid)+dth*(linVel1+ GPrtcl_linVel(1,pid))
 #ifdef ObliqueWallTest    
-      if(GPrtcl_PosR(pid)%y<two*GPrtcl_PosR(pid)%w) IsRotate=.true.
+      if(GPrtcl_PosR(pid)%y<2.0_RK*GPrtcl_PosR(pid)%w) IsRotate=.true.
 #endif
     ENDDO
 
