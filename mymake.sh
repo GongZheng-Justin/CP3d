@@ -17,7 +17,7 @@ echo                                                                  | tee -a $
 echo "!========================*- CP3d -*========================!"   | tee -a $CompilingLog
 echo "!                                                          !"   | tee -a $CompilingLog
 echo "!          CP3d:    Channel-Particle 3d                    !"   | tee -a $CompilingLog
-echo "!          Version: 2.0                                    !"   | tee -a $CompilingLog
+echo "!          Version: 1.0                                    !"   | tee -a $CompilingLog
 echo "!          Author:  Zheng Gong                             !"   | tee -a $CompilingLog
 echo "!          E-mail:  gongzheng_justin@outlook.com           !"   | tee -a $CompilingLog
 echo "!                                                          !"   | tee -a $CompilingLog
