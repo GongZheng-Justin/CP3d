@@ -1,0 +1,143 @@
+!
+! -*- input parameter for Channel flow -*-
+!
+! -*- mode: f90 -*-
+
+!===================
+&BasicParam
+!===================
+
+  RestartFlag = F          ! Restart or not
+
+  ! Flow type (1=Channel,  2=Half channel, 3=Taylor-Green vortex, 4=Isotropic turbulence, 5=Added new)
+  FlowType = 5
+
+  ! Mesh options
+  xlx = 1.0                ! Domain length in x-dir
+  yly = 1.0                ! Domain length in y-dir 
+  zlz = 1.0                ! Domain length in z-dir
+  nxc = 128                ! Grid point number in x-dir
+  nyc = 128                ! Grid point number in y-dir
+  nzc = 128                ! Grid point number in z-dir
+
+  ! Physical properties
+  xnu = 1.0E-2             ! Kinematic viscosity 
+  gravity =0.00 0.0 0.0    ! Gravity or  other constant body forces (if any)
+  FluidDensity = 1000      ! Fluid density
+
+  ! Time stepping
+  dtMax= 1.0E-2            ! Maxium time step
+  iCFL = 1                 ! Use CFL condition to change time step dynamically( 1: yes, 2:no ).
+  CFLc = 1.7               ! CFL parameter
+  ifirst= 1                ! First iteration
+  ilast = 10000            ! Last iteration
+
+  ! Numerical scheme options
+  ischeme = 3              ! (1=AB2, 2=RK2, 3=RK3)
+  IsImplicit= 2            ! (0=full explicit, 1=partial implicit, 2=full implicit for viscous term)
+  FFTW_plan_type = 1       ! (1=FFTW_MEASURE,  2=FFTW_ESTIMATE)
+
+  ! Boundary conditions
+  !  0: Periodic
+  ! -1: NoSlip
+  ! -2: Slip
+  ! -3: Convective (ONLY AVAILABLE for x+ and y+)
+  ! From left to right: 
+  !            x-,   x+,   y-,   y+,   z-,   z+
+  ! And the velocity Bc values will ONLY be used corresponding to the no-slip Bc
+  ! While at the same time, you are allow to assign a transpiration Bc for uy in y- bottom(uyBcValue(3) dosen't work).
+  BcOption  =  -1,   -1,   -1,   -1,   -1,   -1
+  uxBcValue = 0.0,  0.0,  0.0,  1.0,  0.0,  0.0
+  uyBcValue = 0.0,  0.0,  0.0,  0.0,  0.0,  0.0
+  uzBcValue = 0.0,  0.0,  0.0,  0.0,  0.0,  0.0
+
+  ! I/O, Statistics
+  ivstats  = 20                  ! time step interval for statistics calculation
+  saveStat = 2000                ! Output Statistics file frequency
+  SaveVisu = 2000                ! Output visulizing file frequency
+  BackupFreq = 10000             ! Output Restarting file frequency
+  RunName  = "LidCavity"         ! Run name
+  ResultsDir="./CFD/Results/"    ! Result directory
+  RestartDir="./CFD/Restart/"    ! Restart directory
+  Cmd_LFile_Freq  = 5            ! Report frequency in the terminal
+  LF_file_lvl     = 5            ! Logfile report level 
+  LF_cmdw_lvl     = 3            ! Terminal report level
+
+  ! Decomp2d options
+  p_row = 2
+  p_col = 2
+
+  ! limited velocity and div
+  vel_limit = 2.0
+  div_limit = 0.2
+
+/End of NAMELIST "&BasicParam"
+
+!===================
+&ubulk_Param
+!===================
+
+  IsUxConst= F
+  IsUbulkGlobal =T
+  
+  ubulk = 0.0
+  ybulk1= 0.0
+  ybulk2= 1.0
+
+/End of NAMELIST "&ubulk_Param"
+
+!=================
+&MeshSection
+!=================
+
+  nSection      =    1    ! yly will be diveded into "nSection" part
+  
+/End of NAMELIST "MeshSection"
+
+!=================
+&MeshOptions
+!=================
+
+  SectionLength =    1    ! e.g. If nSection=2, and SectionLength=[1,3], yly is further divided into 1/4*yly and 3/4*yly
+  nycSection    =  128    ! sum(nycSection)=nyc
+  StretType     =    0    ! 0:Uniform; 1:Tangent hyperbolic function; 2:Sine/cosine function; 3:Proportional sequence
+  StretOption   =    0    ! 0:bottom;  1:top
+  SectioncStret =  0.0    ! Stretching parameter. if StretType=0, this parameter doesn't work.
+  
+/End of NAMELIST "MeshOptions"
+
+!====================
+&LesOptions
+!====================
+
+  ! 0:none; 1:Smagorinsky Model; 2:WALE Model; 3:MTS Model;
+  LES_type   = 0
+
+  ! 0:trapezoidal type, 1:Simpson type
+  FilterType = 1
+
+/End of NAMELIST "&LesOptions"
+
+!=================
+&IO_Options
+!=================
+  
+  iskip = 1
+  jskip = 1
+  kskip = 1
+
+  save_ux    = T
+  save_uy    = F
+  save_uz    = F
+  save_wx    = F
+  save_wy    = F
+  save_wz    = F
+  save_wMag  = F
+  save_pr    = F
+  save_Q_vor = F
+  save_lamda2= T
+
+  WriteHistOld = T
+  ReadHistOld  = T
+
+/End of NAMELIST "&IO_Options"
