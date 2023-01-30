@@ -1,0 +1,13 @@
+This folder contains the input file(s) for benchmark of Two-way coupled Largrangian-Particle Tracking Method.
+
+Exe name: 
+  channelLPT (CFDOrder = 2; Coupling = 2)
+
+Reference:
+  [1] Junhoon Lee and Changhoon Lee, Modification of particle-laden near-wall turbulence: Effect of Stokes number, Physics Of Fluids, 27, 023303 (2015)
+
+Note:
+  This benchmark should be restarted from a fully-developed turbulent channel flow.
+
+Zheng Gong
+2022-07-25
