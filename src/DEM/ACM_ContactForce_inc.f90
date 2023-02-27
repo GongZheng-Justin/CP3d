@@ -29,7 +29,8 @@
 #endif
         k_n= -Prop_ij%StiffnessCoe_n/(TCollision*TCollision)
       else
-        k_n= -Prop_ij%Kn_Grav
+        k_n=  Prop_ij%StiffnessCoe_n/(TCollision*TCollision)
+        k_n= -max(k_n,Prop_ij%Kn_Grav)
       endif
       d_n= -Prop_ij%DampingCoe_n/TCollision
       fn = k_n*ovrlp +d_n* vrn
