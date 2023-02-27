@@ -362,10 +362,10 @@ contains
     GravityMag=norm(DEM_Opt%gravity)
     if(DEM_Opt%CF_Type == ACM_LSD) then
       kn_Grav= pari%Mass*GravityMag/(GRAV_OVERLAP*pari%Radius)
-      kn_Grav= max(parj%Mass*GravityMag/(GRAV_OVERLAP*parj%Radius),kn_Grav)
+      if(.not.iswall) kn_Grav= max(parj%Mass*GravityMag/(GRAV_OVERLAP*parj%Radius),kn_Grav)
     elseif(DEM_Opt%CF_Type == ACM_nLin) then
       kn_Grav= pari%Mass*GravityMag/(GRAV_OVERLAP*pari%Radius)**(1.5_RK)
-      kn_Grav= max(parj%Mass*GravityMag/(GRAV_OVERLAP*parj%Radius)**(1.5_RK),kn_Grav)
+      if(.not.iswall) kn_Grav= max(parj%Mass*GravityMag/(GRAV_OVERLAP*parj%Radius)**(1.5_RK),kn_Grav)
     endif
     Bnry%kn_Grav=kn_Grav
 #endif
