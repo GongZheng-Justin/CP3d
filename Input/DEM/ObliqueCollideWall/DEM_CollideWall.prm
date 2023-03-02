@@ -1,0 +1,176 @@
+!
+! -*- input parameter for DEM -*-
+!
+! -*- mode: f90 -*-
+
+!======================================
+&DEMOptions
+!======================================
+ 
+  RestartFlag = F              ! restart or not
+  numPrtclFix = 0              ! total fixed particel number
+  numPrtcl=     1              ! total particle number
+  dtDEM   =  1.0E-6            ! time step
+  ifirstDEM =  1               ! first time step
+  ilastDEM  =  30000           ! last time step      
+  gravity=  1.5  -1.0  0.0     ! gravity or other constant body forces (if any)
+
+  ! Simulation domain
+  minpoint = 0.000  0.000    0.000
+  maxpoint = 0.060  0.060    0.060
+  isPeriodic = T,F,T
+
+  Prtcl_cs_ratio = 1.0  
+  CS_Method  = 1       ! Contact search method (1: NBS_Munjiza; 2: NBS_Munjiza_Hrchl )
+  CF_Type    = 2       ! Contact force type (1: LSD, 2:nLin)
+  PI_Method  = 3       ! Integration scheme for translational motion ( 1:FE, 2:AB2, 3:AB3)
+  PRI_Method = 3       ! Integration scheme for rotational motion ( 1:FE, 2:AB2, 3:AB3 )
+
+  numPrtcl_Type = 1    ! number of particle type
+  numWall_type  = 1    !  number of wall type
+
+  CntctList_Size =6    ! Contact list size, 6 means every particle can contact with 12 neighbour particles/walls in average
+  CS_numlvls    = 0    ! Number of levels in multi-level contact search, 0 means default behavior.
+
+  Base_wall_id = 10000000     ! Global wall id will start at (Base_wall_id+1). Please make sure that  Base_wall_id >= numPrtcl
+  Wall_max_update_iter = 100  ! Near wall list will be updated no more than every 100 iterations
+  Wall_neighbor_ratio = 2.00  ! The particle withthin 2*MaxRadius, will be added into the NEAR WALL LIST
+
+  RunName  = "CollideWall"        ! Run name
+  ResultsDir  = "./DEM/Results/"  ! Result directory
+  RestartDir = "./DEM/Restart/"   ! Restart directory
+  SaveVisuDEM   =  500            ! Output visulizing file frequency
+  BackupFreqDEM = 10000       ! Output Restarting file frequency
+  Cmd_LFile_Freq  = 500       ! Report frequency in the terminal is 500 time step
+  LF_file_lvl     = 5         ! Logfile report level 
+  LF_cmdw_lvl     = 3         ! Terminal report level
+
+  ! Where is the geometry from? 0: Added directly in the program, 1: From NAMELIST "&GeometryMakingParam", 2: From external STL file
+  GeometrySource =1
+  Geom_Dir ="DEMGeom.stl"   ! If GeometrySource =2, please give a STL file routine, if not, just ignore it.
+
+/End of NAMELIST "&DEMOptions"
+
+!======================================
+&ParticlePhysicalProperty
+!======================================
+
+  Bin_Divided = 1
+  Density  = 2500.0
+  Diameter = 3.18E-3
+  YoungsModulus_P = 10.0E+6
+  PoissonRatio_P  = 0.22  
+  
+  ! The following coefficinets are set to all the binary physical propertys for particle-particle group.
+  FrictionCoe_s_PP = 0.092
+  FrictionCoe_k_PP = 0.092
+  RestitutionCoe_n_PP = 0.97
+
+/End of NAMELIST "&ParticlePhysicalProperty"
+
+!======================================
+&WallPhysicalProperty
+!======================================
+
+  YoungsModulus_W= 10.0E+6
+  PoissonRatio_W = 0.33
+  
+  ! The following coefficinets are set to all the binary physical propertys for particle-wall group.
+  FrictionCoe_s_PW = 0.125
+  FrictionCoe_k_PW = 0.125
+  RestitutionCoe_n_PW = 0.831
+
+/End of NAMELIST "&WallPhysicalProperty"
+
+!======================================
+&ParticleMakingOption
+!======================================
+
+  ! Making particle domain
+  MkPrtclMinpoint = 0.000  0.010  0.000
+  MkPrtclMaxpoint = 0.060  0.060  0.060
+
+  Fill_order = "x","z","y"
+  Distance_Ratio = 1.5
+  VelMag = 1.5
+
+/End of NAMELIST "&ParticleMakingOption"
+
+!======================================
+&GeometryMakingNumPlane
+!======================================
+
+ ! NOTE here: ONLY if GeometrySource = 1, this Namelist will work !!!
+ nplane= 2  ! number of planes
+
+/End of NAMELIST "&GeometryMakingNumPlane"
+
+!======================================
+&GeometryMakingParam
+!======================================
+
+ ! NOTE here: ONLY if GeometrySource = 1, this Namelist will work !!!
+ ! point1, point2, point3, point4, translational velocity, user_id, wall_Type, bothSide, isInfinite
+
+ user_id   = 1  1 
+ wall_Type = 1  1
+ bothSide  = F  F 
+ IsInfinite= T  T
+ Point1    = 0.00 0.06 0.00, 0.00 0.00 0.00, !0.00 0.000 0.00, 0.00 0.000 0.03,
+ Point2    = 0.06 0.06 0.00, 0.00 0.00 0.06, !0.09 0.000 0.00, 0.00 0.015 0.03,                
+ Point3    = 0.06 0.06 0.06, 0.06 0.00 0.06, !0.09 0.015 0.00, 0.09 0.015 0.03,
+ Point4    = 0.00 0.06 0.06, 0.06 0.00 0.00, !0.00 0.015 0.00, 0.09 0.000 0.03,
+ TraVel    = 0.00 0.00 0.00, 0.00 0.00 0.00, !0.00 0.000 0.00, 0.00 0.000 0.00, 
+
+/End of NAMELIST "&GeometryMakingParam"
+
+!======================================
+&PrtclDomainDecomp
+!======================================
+
+!
+! Domain decomposition
+!
+! -*-   If read_partition=.TRUE., the Partition informarion will be read from the  NAMELIST "&Domain_Partition";
+! -*-   If read_partition=.False.,the Domain will be divided equally.
+!
+  row = 1           ! Row partition
+  col = 1           ! Column partition
+  pencil = "y"
+
+/End of NAMELIST "&PrtclDomainDecomp"
+
+!======================================
+&PrtclVisuOption
+!======================================
+
+  saveXDMFOnce    = T
+
+  save_ID         = F
+  save_Diameter   = F
+  save_UsrMark    = F
+  save_LinVel     = T
+  save_RotVel     = T
+  save_CntctForce = F
+
+  save_Type       = F
+  save_LinAcc     = F
+  save_Theta      = F
+  save_RotAcc     = F
+  save_Torque     = F
+
+/End of NAMELIST "&PrtclVisuOption"
+
+!======================================
+&Domain_Partition
+!======================================
+
+!
+! This part will be read if read_partition=.TRUE. in NAMELIST "&BasicParam"
+!
+
+x_Partition = 
+y_Partition =
+z_Partition =
+
+/End of NAMELIST "&Domain_Partition"
