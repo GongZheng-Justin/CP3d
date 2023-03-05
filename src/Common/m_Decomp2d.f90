@@ -1878,7 +1878,7 @@ contains
   
   !**********************************************************************
   ! sum_halo
-  !  To sum extent, this subroutine can be regarded as the reverse 
+  !  To some extent, this subroutine can be regarded as the reverse 
   !   version of "update_halo".
   !**********************************************************************
   subroutine sum_halo(mat,mb,hi)
