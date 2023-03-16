@@ -5,7 +5,7 @@ module m_TScheme
   use m_Decomp2d
   use m_Parameters
   use m_MeshAndMetries
-  use m_Variables,only: mb1,nut,OutFlowInfoX,OutFlowInfoY
+  use m_Variables,only: mb1,OutFlowInfoX,OutFlowInfoY
 #if defined CFDDEM || defined CFDLPT_TwoWay
   use m_Variables,only: FpForce_x,FpForce_y,FpForce_z
 #endif
