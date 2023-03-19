@@ -93,7 +93,6 @@ contains
     DO itime=ifirst, ilast
       call total_timer%start()
       call CalcMaxCFL(ux,uy,uz,uddxmax)
-      cflmp=uddxmax*dt
       if( icfl==1 ) then
         dt= CFLc/uddxmax
         dt= min(dt,dtMax)
@@ -101,6 +100,7 @@ contains
       else
         dt= dtMax  
       endif
+      cflmp=uddxmax*dt
 
       do ns=1,iadvance
         ! step0: Update the Projection Method coefficients.
