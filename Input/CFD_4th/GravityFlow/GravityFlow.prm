@@ -12,7 +12,7 @@
   ! Flow type ( 1=Channel, 2=Half channel )
   FlowType  = 2
   ubulk= 1.4352
-  IsUxConst = T
+  IsUxConst = F
   IsUseCRF  = F          ! use Converting Reference Frame or not
   uCRF= 0.0              ! Velocity of the Converting Reference Frame
 
