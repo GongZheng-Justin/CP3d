@@ -1793,7 +1793,7 @@ contains
         enddo
       enddo
     else
-      allocate(arrYplane(decomp_xhzf%y2sz(1),decomp_xhzf%y1sz(3),2))
+      allocate(arrYplane(decomp_xhzf%y2sz(1),decomp_xhzf%y2sz(3),2))
       jct=nyc+1-jForLCS(1)
       do kc=1,decomp_xhzf%y2sz(3)
         do ic=1,decomp_xhzf%y2sz(1)
@@ -1877,7 +1877,7 @@ contains
         enddo
       enddo
     else
-      allocate(arrYplane(decomp_xhzf%y2sz(1),decomp_xhzf%y1sz(3),2))
+      allocate(arrYplane(decomp_xhzf%y2sz(1),decomp_xhzf%y2sz(3),2))
       jct=nyc+1-jForLCS(1)
       do kc=1,decomp_xhzf%y2sz(3)
         do ic=1,decomp_xhzf%y2sz(1)
@@ -2040,7 +2040,7 @@ contains
         enddo
       enddo
     else
-      allocate(arrYplane(decomp_xhzf%y2sz(1),decomp_xhzf%y1sz(3),2))
+      allocate(arrYplane(decomp_xhzf%y2sz(1),decomp_xhzf%y2sz(3),2))
       jct=nyc+1-jForLCS(1)
       do kc=1,decomp_xhzf%y2sz(3)
         do ic=1,decomp_xhzf%y2sz(1)
@@ -2124,7 +2124,7 @@ contains
         enddo
       enddo
     else
-      allocate(arrYplane(decomp_xhzf%y2sz(1),decomp_xhzf%y1sz(3),2))
+      allocate(arrYplane(decomp_xhzf%y2sz(1),decomp_xhzf%y2sz(3),2))
       jct=nyc+1-jForLCS(1)
       do kc=1,decomp_xhzf%y2sz(3)
         do ic=1,decomp_xhzf%y2sz(1)
