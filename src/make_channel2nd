@@ -3,12 +3,11 @@
 #=======================================================================
 CMP     =  gcc_MPI#intel_MPI #intel_serial #gcc_serial
 exeName =  channel2nd
-CFD_DEFS_Add =#-DFFTW_1D
+CFD_DEFS_Add =
 
 # ============================ CFD part ============================
 # Choose pre-processing options
 #   -DSaveNode
-#   -DFFTW_1D
 # CFD options
 
 CFD_dir    =  ./CFD_2nd/
