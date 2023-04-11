@@ -3,7 +3,7 @@
 #=======================================================================
 CMP       =  gcc_MPI#intel_MPI #intel_serial #gcc_serial
 exeName   =  channelDEM
-CFD_DEFS_Add   =#-DFFTW_1D
+CFD_DEFS_Add   =
 DEM_DEFS_Add   =
 CFDDEM_DEFS_Add=#-DSeveralSphereInfo
 
