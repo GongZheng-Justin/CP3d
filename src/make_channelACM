@@ -3,7 +3,7 @@
 #=======================================================================
 CMP            =  gcc_MPI#intel_MPI #intel_serial #gcc_serial
 exeName        =  channelACM
-CFD_DEFS_Add   =#-DFFTW_1D
+CFD_DEFS_Add   =
 ACM_DEFS_Add   =#-DObliqueWallTest -DRotateOnly -DJiaYan -DChanBraunJFM2011
 CFDACM_DEFS_Add=#-DIBMDistribute2 -DSeveralSphereInfo -DChanBraunJFM2011 -DTest_IBM_MPI
 
