@@ -3,13 +3,12 @@
 #=======================================================================
 CMP     =  gcc_MPI#intel_MPI
 exeName =  channel4th
-CFD_DEFS_Add =#-DFFTW_1D
+CFD_DEFS_Add =
 IsSolveScalar= 0
 
 # ============================ CFD part ============================
 # Choose pre-processing options
 #   -DSaveNode
-#   -DFFTW_1D
 
 CFD_dir    =  ./CFD_4th/
 Commdir    =  ./Common/
