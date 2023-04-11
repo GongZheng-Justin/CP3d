@@ -3,7 +3,7 @@
 #=======================================================================
 CMP      = gcc_MPI#intel_MPI #intel_serial #gcc_serial
 exeName  = channelLPT
-CFD_DEFS_Add=#-DFFTW_1D
+CFD_DEFS_Add=
 LPT_DEFS_Add=
 CFDOrder = 2
 Coupling = 2
