@@ -3,7 +3,7 @@
 #=======================================================================
 CMP      = gcc_MPI#intel_MPI #intel_serial #gcc_serial
 exeName  = channelATP
-CFD_DEFS_Add=#-DFFTW_1D
+CFD_DEFS_Add=
 ATP_DEFS_Add=
 
 # ============================  CFDATP  ============================
