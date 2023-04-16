@@ -26,10 +26,10 @@ SrcF  = m_Decomp2d.f90 m_TypeDef.f90 m_LogInfo.f90 m_Parameters.f90 m_MeshAndMet
 #-----------------------------------------------------------------------
 ifeq ($(CMP),intel_MPI)
   FortC = mpiifort
-  CFLAG = -fpp -O3 -mcmodel=large -fp-model fast=2#-ipo -xSSE4.2 -axAVX,CORE-AVX-I,CORE-AVX2
+  CFLAG = -fpp -O3 -mcmodel=large -fp-model fast=2 -g# -heap-arrays 20 #-ipo -xSSE4.2 -axAVX,CORE-AVX-I,CORE-AVX2
 else ifeq ($(CMP),intel_serial)
   FortC = ifort
-  CFLAG = -fpp -O3 -mcmodel=large -fp-model fast=2#-ipo -xSSE4.2 -axAVX,CORE-AVX-I,CORE-AVX2
+  CFLAG = -fpp -O3 -mcmodel=large -fp-model fast=2 -g# -heap-arrays 20 #-ipo -xSSE4.2 -axAVX,CORE-AVX-I,CORE-AVX2
 else ifeq ($(CMP),gcc_MPI)
   FortC = mpif90
   CFLAG = -cpp -O3 -Wall -fbacktrace -g -ffree-line-length-none -mcmodel=large -funroll-loops -floop-optimize
