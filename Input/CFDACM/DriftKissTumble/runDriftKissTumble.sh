@@ -21,7 +21,7 @@ cd ../../../
 chmod a+x mymake.sh
 mkdir -p ./ACM/Restart/ 2> /dev/null
 
-./mymake.sh -exe-channelACM -cmp-gcc_MPI -CompileThirdParty-0 -deleteCompileFile-1 -CFD_DEFS_Add -ACM_DEFS_Add-DDriftKissTumbleBreugem \
+./mymake.sh -exe-channelACM -cmp-"$cmpStr"_MPI -CompileThirdParty-0 -deleteCompileFile-1 -CFD_DEFS_Add -ACM_DEFS_Add-DDriftKissTumbleBreugem \
  -CFDACM_DEFS_Add-DSeveralSphereInfo
 
 cp ./Input/CFDACM/DriftKissTumble/SpheresCoord.DKT ./ACM/Restart/SpheresCoord.dat
