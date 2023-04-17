@@ -654,13 +654,6 @@ contains
       ENDIF
       close(nUnit,IOSTAT=ierror)
     endif
-    
-#include "EnergySpectra_write_fun_inc.f90"
-    nfstime=0; SumStat=0.0_RK; PrGradsum=0.0_RK; nSpectime=0; 
-    if(clcSpectra1D) then
-      EnergySpecX=0.0_RK; EnergySpecZ=0.0_RK
-    endif
-    if(clcSpectra2D) EnergySpec2D=0.0_RK
 
 #ifdef HighOrderGradStat
     call MPI_REDUCE(SumGrad,SumGradR,nGradStat*nyp,real_type,MPI_SUM,0,MPI_COMM_WORLD,ierror)
@@ -683,7 +676,15 @@ contains
     endif
     SumGrad=0.0_RK
 #endif
-  end subroutine clcStat
+
+#include "EnergySpectra_write_fun_inc.f90"
+
+    nfstime=0; SumStat=0.0_RK; PrGradsum=0.0_RK; nSpectime=0; 
+    if(clcSpectra1D) then
+      EnergySpecX=0.0_RK; EnergySpecZ=0.0_RK
+    endif
+    if(clcSpectra2D) EnergySpec2D=0.0_RK
+end subroutine clcStat
 
 #undef iSpec1DUU
 #undef iSpec1DVV
