@@ -1,0 +1,78 @@
+#=======================================================================
+# Makefile example --Zheng Gong, 2020-03-04(yy/mm/dd)
+#=======================================================================
+CMP      = gcc_MPI#intel_MPI #intel_serial #gcc_serial
+exeName  = channelATP
+CFD_DEFS_Add=
+ATP_DEFS_Add=
+
+# ============================  CFDATP  ============================
+# Choose pre-processing options
+#   -DDOUBLE_PREC - use double-precision
+#   -DSAVE_SINGLE - Save 3D data in single-precision
+# CFDOrder: 1=SecondOrder, 2=FourthOrder
+# Coupling: 1=One-way coupling; 2:Two-way coupling
+
+CFDATP_dir =  ./CFDATP/
+CommDEFS   = -DCompiled_With_MPI -DVectorOperator -DSAVE_SINGLE
+
+CFD_DEFS   = -DSaveNode
+ATP_DEFS   =
+CFD_DEFS  += $(CFD_DEFS_Add)
+ATP_DEFS  += $(ATP_DEFS_Add)
+
+CFD_inc    = -I./ThirdParty/fftw/ -I./Common/
+CFD_lib    = -L./ThirdParty/fftw/ -lfftw3 -lm
+
+# CFDATP source files
+ATP_DEFS += -DCFDFourthOrder
+CFD_dir:=  ./CFD_4th/
+Commdir:=  ./Common/
+SrcT   := m_Parameters.f90 m_Variables.f90 m_MeshAndMetries.f90 m_BC_and_Halo.f90 m_Tools.f90 m_TScheme.f90 \
+          m_FlowCase.f90 m_Poisson.f90 m_IOAndVisu.f90 m_ChannelSystem.f90
+CFD_src:= $(addprefix $(CFD_dir),${SrcT})
+  
+SrcT   := m_Decomp2d.f90 m_TypeDef.f90 m_Timer.f90 m_LogInfo.f90
+Commsrc:= $(addprefix $(Commdir),${SrcT})
+  
+SrcT   := ATP_Parameters.f90 ATP_Decomp_2d.f90 ATP_Property.f90 ATP_Variables.f90 ATP_ContactSearchPW.f90 \
+          ATP_Integration.f90 ATP_Comm.f90 ATP_Statistics.f90 ATP_IOAndVisu.f90 ATP_System.f90 \
+          ATP_Fpforce.f90 ATP_main.f90
+ATP_src:= $(addprefix $(CFDATP_dir),${SrcT})
+
+#-----------------------------------------------------------------------
+# Normally no need to change anything below
+#-----------------------------------------------------------------------
+ifeq ($(CMP),intel_MPI)
+  FortC = mpiifort
+  CFLAG = -fpp -O3 -mcmodel=large -fp-model fast=2 -g#-heap-arrays 20#-ipo -xSSE4.2 -axAVX,CORE-AVX-I,CORE-AVX2
+else ifeq ($(CMP),intel_serial)
+  FortC = ifort
+  CFLAG = -fpp -O3 -mcmodel=large -fp-model fast=2 -g#-heap-arrays 20#-ipo -xSSE4.2 -axAVX,CORE-AVX-I,CORE-AVX2
+else ifeq ($(CMP),gcc_MPI)
+  FortC = mpif90
+  CFLAG = -cpp -O3 -Warray-bounds -fbacktrace -g -ffree-line-length-none -mcmodel=large -funroll-loops -floop-optimize
+else ifeq ($(CMP),gcc_serial) 
+  FortC = gfortran
+  CFLAG = -cpp -O3 -Warray-bounds -fbacktrace -g -ffree-line-length-none -mcmodel=large -funroll-loops -floop-optimize
+endif
+
+all: $(exeName)
+Commobj   = $(Commsrc:%.f90=%.o)
+CFD_obj   = $(CFD_src:%.f90=%.o)
+CFDATP_obj= $(ATP_src:%.f90=%.o)
+$(exeName):$(Commobj) $(CFD_obj) $(CFDATP_obj)
+	         $(FortC) $(CFLAG) -o $@ $(Commobj) $(CFD_obj) $(CFDATP_obj) $(CFD_lib)
+$(Commobj):$(Commdir)%.o :$(Commdir)%.f90
+	         $(FortC) $(CFLAG) $(CommDEFS) -c $<
+	         @ mv $(@F) ${Commdir}
+$(CFD_obj):%.o :%.f90
+	         $(FortC) $(CFLAG) $(CFD_inc) $(CFD_DEFS) -c $<
+	         @ mv $(@F) ${CFD_dir}
+$(CFDATP_obj):%.o :%.f90
+	         $(FortC) $(CFLAG) $(ATP_DEFS) -c $<
+	         @ mv $(@F) ${CFDATP_dir}
+
+.PHONY: clean
+clean:
+	rm -fr *.o *.mod $(exeName) $(CFD_dir)*.o $(Commdir)*.o $(CFDATP_dir)*.o
