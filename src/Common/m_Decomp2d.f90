@@ -1423,6 +1423,7 @@ contains
     call MPI_FILE_WRITE_ALL(fh,wk,subsizes(1)*subsizes(2)*subsizes(3),data_type,MPI_STATUS_IGNORE,ierror)
     call MPI_FILE_CLOSE(fh,ierror)
     call MPI_TYPE_FREE(newtype,ierror)
+    call MPI_COMM_FREE(newcomm,ierror)
     deallocate(wk)
   end subroutine decomp_2d_write_every
 
