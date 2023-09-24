@@ -197,10 +197,10 @@ contains
 #endif
     enddo
         
-    do i=1,nPType
-      do j=1,nPType
-        pari = this%Prtcl_PureProp(i)
-        parj = this%Prtcl_PureProp(i)
+    do j=1,nPType
+      parj = this%Prtcl_PureProp(j)
+      do i=1,nPType
+        pari = this%Prtcl_PureProp(i)       
         Bnry= clc_BnryPrtcl_Prop(pari,parj,FrictionCoe_s_PP,FrictionCoe_k_PP,RestitutionCoe_n_PP,.false.)
         this%Prtcl_BnryProp(i,j)= Bnry  
 #ifdef CFDACM
@@ -272,10 +272,10 @@ contains
        this%Wall_PureProp(i)%Inertia = 1.0E50_RK
     enddo
 
-    do i = 1, nPType
-      do j = 1, nWType
-        pari = this%Prtcl_PureProp(i)
-        wall = this%Wall_PureProp(j)
+    do j = 1, nWType
+      wall = this%Wall_PureProp(j)
+      do i = 1, nPType   
+        pari = this%Prtcl_PureProp(i)        
         this%PrtclWall_BnryProp(i,j)=clc_BnryPrtcl_Prop(pari,wall,FrictionCoe_s_PW,FrictionCoe_k_PW,RestitutionCoe_n_PW,.true.)
       enddo
 #ifdef CFDACM
