@@ -272,10 +272,11 @@ contains
        this%Wall_PureProp(i)%Inertia = 1.0E50_RK
     enddo
 
-    do j = 1, nWType
-      wall = this%Wall_PureProp(j)
-      do i = 1, nPType   
-        pari = this%Prtcl_PureProp(i)        
+
+    do i = 1, nPType 
+      pari = this%Prtcl_PureProp(i)       
+      do j = 1, nWType
+        wall = this%Wall_PureProp(j)        
         this%PrtclWall_BnryProp(i,j)=clc_BnryPrtcl_Prop(pari,wall,FrictionCoe_s_PW,FrictionCoe_k_PW,RestitutionCoe_n_PW,.true.)
       enddo
 #ifdef CFDACM
