@@ -1,3 +1,4 @@
+#define DEM_NCV_ALLOWED 36
 module Prtcl_CL_and_CF
   use MPI
   use m_TypeDef
@@ -645,14 +646,14 @@ contains
     do while(n>0)
       ncv = ncv + 1
       ! for monosize particles, a particle can contact with NO MORE THAN 12 neighbor particles.
-      if(ncv>20) call DEMLogInfo%CheckForError(ErrT_Abort,"CL_Count_Cntctlink","so big ncv")
+      if(ncv>DEM_NCV_ALLOWED) call DEMLogInfo%CheckForError(ErrT_Abort,"CL_Count_Cntctlink","so big ncv")
       n = Next(n)
     enddo        
 
     n = Head_cp(pid)
     do while(n .ne. -1)
       ncv = ncv + 1
-      if(ncv>20) call DEMLogInfo%CheckForError(ErrT_Abort,"CL_Count_Cntctlink","so big ncv") 
+      if(ncv>DEM_NCV_ALLOWED) call DEMLogInfo%CheckForError(ErrT_Abort,"CL_Count_Cntctlink","so big ncv") 
       n = Next_Cp(n)
     enddo
   end subroutine CL_Count_Cntctlink
@@ -675,7 +676,7 @@ contains
     do while(n>0)
       ncv = ncv + 1
       ! for monosize particles, a particle can contact with NO MORE THAN 12 neighbor particles.
-      if(ncv>20) call DEMLogInfo%CheckForError(ErrT_Abort,"CL_Gather_Cntctlink_Restart","so big ncv")
+      if(ncv>DEM_NCV_ALLOWED) call DEMLogInfo%CheckForError(ErrT_Abort,"CL_Gather_Cntctlink_Restart","so big ncv")
       CntctVec(2*ncv-1) =  id_j(n)
       CntctVec(2*ncv)   =  CntctStatus(n)
       n = Next(n)
@@ -684,7 +685,7 @@ contains
     n = Head_cp(pid)
     do while(n .ne. -1)
       ncv = ncv + 1
-      if(ncv>20) call DEMLogInfo%CheckForError(ErrT_Abort,"CL_Gather_Cntctlink_Restart","so big ncv")
+      if(ncv>DEM_NCV_ALLOWED) call DEMLogInfo%CheckForError(ErrT_Abort,"CL_Gather_Cntctlink_Restart","so big ncv")
       CntctVec(2*ncv-1) =  id_i(n)
       CntctVec(2*ncv)   =  CntctStatus(n)  
       n = Next_Cp(n)
@@ -1047,3 +1048,6 @@ contains
   end subroutine CL_AddLubForcePW
 #endif
 end module Prtcl_CL_and_CF
+#ifdef DEM_NCV_ALLOWED
+#undef DEM_NCV_ALLOWED
+#endif
