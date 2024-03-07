@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<!DOCTYPE Xdmf SYSTEM "Xdmf.dtd" []>
+<Xdmf xmlns:xi="http://www.w3.org/2001/XInclude" Version="2.0">
+<Domain>
+    <Grid Name="TimeSeries" GridType="Collection" CollectionType="Temporal">
+        <Time TimeType="List">
+            <DataItem Format="XML" NumberType="Int" Dimensions="     1">
+                    0            </DataItem>
+        </Time>
+        <Grid Name="T0000000000" GridType="Uniform">
+            <Topology TopologyType="Polyvertex" NodesPerElement="        0"/>
+            <Geometry GeometryType="XYZ">
+                <DataItem Format="Binary" DataType="Float" Precision="8" Endian="Native" Dimensions=" 3      4218" Seek="   0">
+                    MoveSphereXdmf.dat
+                </DataItem>
+            </Geometry>
+            <Attribute Type="Scalar" Center="Node" Name="Diameter">
+                <DataItem Format="Binary" DataType="Float" Precision="8" Endian="Native" Dimensions=" 1      4218" Seek="   101232">
+                    MoveSphereXdmf.dat
+                </DataItem>
+            </Attribute>
+            <Attribute Type="Scalar" Center="Node" Name="Type">                <DataItem Format="Binary" DataType="int" Precision="4" Endian="Native" Dimensions=" 1      4218" Seek="   134976">
+                    MoveSphereXdmf.dat
+                </DataItem>
+            </Attribute>
+        </Grid>
+    </Grid>
+</Domain>
+</Xdmf>
