@@ -1,0 +1,76 @@
+!
+! -*- input parameter for Post Particle Dump -*-
+!
+! -*- mode: f90 -*-
+
+!===================
+&BasicParam
+!===================
+
+  Stat_Dir  = "./HopLiu_Stat/"    ! statistic directory
+  StatSuffix   = "HopLiuN"
+
+  ! Part-01 ===================
+  IsReadPrtclDumpOut = F
+  IsRewritePrtclDump = F
+  PrtclDumpDir    = "./Hop_Liu/PrtclDump/"
+  PrtclDumpOutDir = "./Hop_Liu/PrtclDumpOut/"
+  PrtclDumpFilter = "rank*_*"
+
+  ! Part-02 ===================
+  IsSortPrtclDumpOut = F
+  IsAddPeriodicLen   = F
+  xlx =  0.06600
+  yly =  0.02585
+  zlz =  0.03300
+
+  ! Part-03 ===================
+  IsShrinkPrtclDump = F
+  IsRewriteShrink   = T
+  ShrinkDumpDir     = "./Hop_Liu/PrtclDumpOutSmall/"
+  ShrinkDumpNeglect = 12000
+  ShrinkDumpFreq    = 10
+
+  ! Part-04 ===================
+  IsClcHopStat = T
+  ReadHopDir   = "./Hop_Liu/PrtclDumpOutSmall/"
+  iDetectHopSpan  = 0
+  iDetectHopSet   = 0
+  dtInterval   = 8.33333333333333333333E-3
+  moveDistLimit= 1.25E-4
+  yLimit       = 0.0E-3
+
+  VelBinSetX   = -0.030
+  VelBinDeltaX =  0.012
+  VelBinNumX   =  50
+  VelBinSetZ   = -0.205
+  VelBinDeltaZ =  0.010
+  VelBinNumZ   =  42
+
+  AccBinSetX   = -48.75
+  AccBinDeltaX =   2.50
+  AccBinNumX   =   40
+  AccBinSetZ   = -19.0
+  AccBinDeltaZ =   2.0
+  AccBinNumZ   =   20
+
+  TimeBinSet   =-0.02
+  TimeBinDelta = 0.04
+  TimeBinNum   = 40
+  LenBinSetX   = -0.19E-2
+  LenBinDeltaX =  0.38E-2
+  LenBinNumX   = 70
+  LenBinSetZ   = -0.71875E-2
+  LenBinDeltaZ = 0.0625E-2
+  LenBinNumZ   =  35
+
+  ! Part-05 ===================
+  ! Cross-stream diffusion
+  IsClcCrossDiffusion = F
+  ReadDiffuseDir      =  "./Hop_Liu/PrtclDumpOutSmall/"  
+  CrossDiffBinSet     =  0
+  CrossDiffBinDelta   =  0.5E-3
+  CrossDiffusionBinNum=  1000
+  iDetectCrossSet   =    0
+
+/End of NAMELIST "&BasicParam"
