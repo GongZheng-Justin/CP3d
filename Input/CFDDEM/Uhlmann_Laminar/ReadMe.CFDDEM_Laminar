@@ -1,0 +1,19 @@
+This folder contains the input file(s) for benchmark of unresolved four-way coupling CFDDEM method.
+
+Exe name:
+  channelDEM
+  
+Reference:
+  [1] Aman G. Kidanemariam, Markus Uhlmann, 2014, International Journal of Multiphase Flow, 67, 174-188
+        Interface-resolved direct numerical simulation of the erosion of a sediment bed sheared by laminar channel flow.
+
+  [2] Aussillous, P., Chauchat, J., Pailha, M., Médale, M., Guazzelli, E., 2013. J. Fluid Mech. 736, 594–615
+        Investigation of the mobile granular layer in bedload transport by laminar shearing flows.
+        
+Note:
+  Before running the script 'runCFDDEMLaminar.sh', one should first run 
+    mpirun -n 8 ./dem Uhlmann_Laminar.dem 
+  to generate the bed particle.
+
+Zheng Gong
+2022-07-25
