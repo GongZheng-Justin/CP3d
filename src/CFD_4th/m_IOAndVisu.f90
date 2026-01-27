@@ -1,12 +1,13 @@
-module m_IOAndVisu
+#include "definitions_inc.f90"
+module f4_IOAndVisu
   use MPI
-  use m_TypeDef
-  use m_LogInfo
-  use m_decomp2d
-  use m_Parameters
-  use m_MeshAndMetries
-  use m_Variables,only:mb1 
-  use m_Tools,only: Clc_Q_vor,Clc_lamda2
+  use mc_TypeDef
+  use mc_LogInfo
+  use mc_decomp2d
+  use f4_Parameters
+  use f4_MeshAndMetries
+  use f4_Variables,only:mb1 
+  use f4_Tools,only: Clc_Q_vor,Clc_lamda2
   implicit none
   private
 
@@ -22,112 +23,156 @@ module m_IOAndVisu
 
 contains
 
-  !******************************************************************
+  !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^80^^^^^^^^90
   ! InitVisu
-  !******************************************************************
-  subroutine InitVisu(ChannelPrm)
-    implicit none
-    character(*),intent(in)::ChannelPrm
+  !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^80^^^^^^^^90
+  subroutine InitVisu(ChannelPrm); implicit none
+    character(len=*),intent(in)::ChannelPrm
 
     ! locals
-    character(128)::XdmfFile
-    integer::nUnitFile,ierror,nflds,ifld,iprec,i,j,k
+    character(len=:),allocatable::XdmfFile
+    integer::iUnit,ierr,nfld,ifld,iprec,i,j,k, int_t, nxc_o, nyc_o, nzc_o, line_num
     NAMELIST /IO_Options/ save_ux,save_uy,save_uz,save_pr,save_wx,save_wy,save_wz,save_wMag,save_Q_vor, &
                           save_lamda2,WriteHistOld,ReadHistOld,iskip,jskip,kskip
 #ifdef ScalarFlow
     NAMELIST /SaveScalarOption/save_scalar
 #endif
  
-    open(newunit=nUnitFile, file=ChannelPrm, status='old',form='formatted',IOSTAT=ierror )
-    if(ierror/=0 .and. nrank==0) call MainLog%CheckForError(ErrT_Abort,"InitVisu", "Cannot open file: "//trim(ChannelPrm))
-    read(nUnitFile, nml=IO_Options)
+    open(newunit=iUnit, file=ChannelPrm, status='old',form='formatted',IOSTAT=ierr )
+    if(ierr/=0 .and. nrank==0) call MainLog%CheckForError(ErrT_Abort,"InitVisu", "Cannot open file: "//strip(ChannelPrm))
+    read(iUnit, nml=IO_Options)
 #ifdef ScalarFlow
-    rewind(nUnitFile)
-    read(nUnitFile, nml=SaveScalarOption)
+    rewind(iUnit)
+    read(iUnit, nml=SaveScalarOption)
 #endif
-    close(nUnitFile,IOSTAT=ierror)
+    close(iUnit,IOSTAT=ierr)
     if(nrank==0) then
-      write(MainLog%nUnit, nml=IO_Options)
+      write(MainLog%iUnit, nml=IO_Options)
 #ifdef ScalarFlow
-      write(MainLog%nUnit, nml=SaveScalarOption)
+      write(MainLog%iUnit, nml=SaveScalarOption)
 #endif
     endif
 
-    ! write XDMF file
+    ! Write XDMF file
     if(nrank/=0) return
-    write(xdmfFile,"(A)") trim(ResultsDir)//"VisuFor"//trim(RunName)//".xmf"
-    open(newunit=nUnitFile, file=XdmfFile,status='replace',form='formatted',IOSTAT=ierror)
-    if(ierror/=0) call MainLog%CheckForError(ErrT_Abort,"InitVisu","Cannot open file:  "//trim(XdmfFile))
-    ! XDMF/XMF Title
-    write(nUnitFile,'(A)') '<?xml version="1.0" ?>'
-    write(nUnitFile,'(A)') '<!DOCTYPE Xdmf SYSTEM "Xdmf.dtd" []>'
-    write(nUnitFile,'(A)') '<Xdmf xmlns:xi="http://www.w3.org/2001/XInclude" Version="2.0">'
-    write(nUnitFile,'(A)') '<Domain>'
+    xdmfFile = strip(ResultsDir_)//"VisuFor"//strip(RunName_)//".xmf"
+    open(newunit=iUnit, file=XdmfFile,status='replace',form='formatted',IOSTAT=ierr)
+    if(ierr/=0) call MainLog%CheckForError(ErrT_Abort,"InitVisu","Cannot open file: "//trim(XdmfFile))
+    write(iUnit,'(A)') '<?xml version="1.0" ?>'
+    write(iUnit,'(A)') '<!DOCTYPE Xdmf SYSTEM "Xdmf.dtd" []>'
+    write(iUnit,'(A)') '<Xdmf xmlns:xi="http://www.w3.org/2001/XInclude" Version="2.0">'
+    write(iUnit,'(A)') '<Domain>'
 
     ! grid
+    nxc_o = nxc / iskip
+    int_t = mod(nxc, iskip)
+    if (int_t == 1) nxc_o = nxc_o + 1
+
+    nyc_o = nyc / jskip
+    int_t = mod(nyc, jskip)
+    if (int_t == 1) nyc_o = nyc_o + 1
+
+    nzc_o = nzc / kskip
+    int_t = mod(nzc, kskip)
+    if (int_t == 1) nzc_o = nzc_o + 1
+
+    line_num = 8
     iprec=mytype_save
-    write(nUnitFile,'(A,3I7,A)')'    <Topology name="TOPO" TopologyType="3DRectMesh" Dimensions="',nzc,nyc,nxc,'"/>'
-    write(nUnitFile,'(A)')'    <Geometry name="GEO" GeometryType="VXVYVZ">'
+    
+    write(iUnit,'(A,3I7,A)')'  <Topology name="TOPO" TopologyType="3DRectMesh" Dimensions="',nzc_o, nyc_o, nxc_o, '"/>'
+    write(iUnit,'(A)')'  <Geometry name="GEO" GeometryType="VXVYVZ">'
     ! x-grid
-    write(nUnitFile,'(A,I1,A,I5,A)') '        <DataItem Format="XML" DataType="Float" Precision="',iprec,'" Endian="Native" Dimensions="',nxc,'">'
-    write(nUnitFile,'(A)',advance='no') '        '
-    do i=1,nxc
-      write(nUnitFile,'(E14.7)',advance='no') (i-1)*dx+dx*0.5_RK
+    write(iUnit,'(A,I1,A,I5,A)') '    <DataItem Format="XML" DataType="Float" Precision="',iprec,'" Endian="Native" Dimensions="',nxc_o,'">'
+    write(iUnit,'(A)',advance='no') '    '
+    int_t = 0
+    do i = 1, nxc, iskip
+      int_t = int_t + 1
+      if(mod(int_t, line_num) == 0) then
+        write(iUnit,'(ES15.7)') (i - 1)*dx+dx*0.5_RK
+        if(int_t < nxc_o) write(iUnit,'(A)',advance='no') '    '
+      else
+        write(iUnit,'(ES15.7)',advance='no') (i - 1)*dx+dx*0.5_RK
+      endif
     enddo
-    write(nUnitFile,'(A)')' '; write(nUnitFile,'(A)')'        </DataItem>'
+    if(mod(nxc_o, line_num) /= 0) write(iUnit, *) ' '    
+    write(iUnit,'(A)')'    </DataItem>'
+
     ! y-grid
-    write(nUnitFile,'(A,I1,A,I5,A)') '        <DataItem Format="XML" DataType="Float" Precision="',iprec,'" Endian="Native" Dimensions="',nyc,'">'
-    write(nUnitFile,'(A)',advance='no') '        '
-    do j=1,nyc
-      write(nUnitFile,'(E14.7)',advance='no') yc(j)
+    write(iUnit,'(A,I1,A,I5,A)') '    <DataItem Format="XML" DataType="Float" Precision="',iprec,'" Endian="Native" Dimensions="',nyc_o,'">'
+    write(iUnit,'(A)',advance='no') '    '
+    int_t = 0
+    do j = 1, nyc, jskip
+      int_t = int_t + 1
+      if(mod(int_t, line_num) == 0) then
+        write(iUnit,'(ES15.7)') yc(j)
+        if(int_t < nyc_o) write(iUnit,'(A)',advance='no') '    '
+      else
+        write(iUnit,'(ES15.7)',advance='no') yc(j)
+      endif
     enddo
-    write(nUnitFile,'(A)')' '; write(nUnitFile,'(A)')'        </DataItem>'
+    if(mod(nyc_o, line_num) /=0) write(iUnit,*)' '
+    write(iUnit,'(A)')'    </DataItem>'
+
     ! z-grid
-    write(nUnitFile,'(A,I1,A,I5,A)') '        <DataItem Format="XML" DataType="Float" Precision="',iprec,'" Endian="Native" Dimensions="',nzc,'">'
-    write(nUnitFile,'(A)',advance='no') '        '
-    do k=1,nzc
-      write(nUnitFile,'(E14.7)',advance='no') (k-1)*dz+dz*0.5_RK
+    write(iUnit,'(A,I1,A,I5,A)') '    <DataItem Format="XML" DataType="Float" Precision="',iprec,'" Endian="Native" Dimensions="',nzc_o,'">'
+    write(iUnit,'(A)',advance='no') '    '
+    int_t = 0
+    do k = 1, nzc, kskip
+      int_t = int_t + 1
+      if(mod(int_t, line_num) == 0) then
+        write(iUnit,'(ES15.7)') (k-1)*dz+dz*0.5_RK
+        if(int_t < nzc_o) write(iUnit,'(A)',advance='no') '    '
+      else
+        write(iUnit,'(ES15.7)',advance='no') (k-1)*dz+dz*0.5_RK
+      endif
     enddo
-    write(nUnitFile,'(A)')' '; write(nUnitFile,'(A)')'        </DataItem>'
-    write(nUnitFile,'(A)')'    </Geometry>'
+    if(mod(nzc_o, line_num) /= 0) write(iUnit,*) ' '
+    write(iUnit,'(A)')'    </DataItem>'
+    write(iUnit,'(A)')'  </Geometry>'
 
     ! Time series
-    nflds = (ilast - ifirst +1)/SaveVisu  + 1
-    write(nUnitFile,'(A)')'    <Grid Name="TimeSeries" GridType="Collection" CollectionType="Temporal">'
-    write(nUnitFile,'(A)')'        <Time TimeType="List">'
-    write(nUnitFile,'(A,I6,A)')'        <DataItem Format="XML" NumberType="Int" Dimensions="',nflds,'">' 
-    write(nUnitFile,'(A)',advance='no')'        '
-    do ifld = ifirst-1,ilast,SaveVisu
-      write(nUnitFile,'(I10)',advance='no') ifld
+    nfld = (ilast - ifirst +1)/SaveVisu  + 1
+    write(iUnit,'(A)')'  <Grid Name="TimeSeries" GridType="Collection" CollectionType="Temporal">'
+    write(iUnit,'(A)')'    <Time TimeType="List">'
+    write(iUnit,'(A,I6,A)')'      <DataItem Format="XML" NumberType="Int" Dimensions="',nfld,'">' 
+    write(iUnit,'(A)',advance='no')'        '
+    do ifld = 1, nfld
+      if(mod(ifld, line_num)==0) then
+        write(iUnit,'(I10)') (ifld-1)*SaveVisu +(ifirst-1)
+        if(ifld < nfld) write(iUnit,'(A)',advance='no') '        '
+      else
+        write(iUnit,'(I10)',advance='no') (ifld-1)*SaveVisu +(ifirst-1)
+      endif     
     enddo
-    write(nUnitFile,'(A)')'        </DataItem>'
-    write(nUnitFile,'(A)')' '; write(nUnitFile,'(A)')'       </Time>'
+    if(mod(nfld, line_num) /=0) write(iUnit,*)' '
+    write(iUnit,'(A)') '      </DataItem>'
+    write(iUnit,'(A)') '    </Time>'
 
     ! attribute
-    do  ifld=ifirst-1,ilast,SaveVisu
-      write(nUnitFile,'(A,I10.10,A)')'        <Grid Name="T',ifld,'" GridType="Uniform">'
-      write(nUnitFile,'(A)')'            <Topology Reference="/Xdmf/Domain/Topology[1]"/>'
-      write(nUnitFile,'(A)')'            <Geometry Reference="/Xdmf/Domain/Geometry[1]"/>'
-      if(save_ux)    call Write_XDMF_One(nUnitFile,ifld,'ux')
-      if(save_uy)    call Write_XDMF_One(nUnitFile,ifld,'uy')
-      if(save_uz)    call Write_XDMF_One(nUnitFile,ifld,'uz')
-      if(save_pr)    call Write_XDMF_One(nUnitFile,ifld,'pr')
-      if(save_wx)    call Write_XDMF_One(nUnitFile,ifld,'wx')
-      if(save_wy)    call Write_XDMF_One(nUnitFile,ifld,'wy')
-      if(save_wz)    call Write_XDMF_One(nUnitFile,ifld,'wz')
-      if(save_wMag)  call Write_XDMF_One(nUnitFile,ifld,'wMag')
-      if(save_Q_vor) call Write_XDMF_One(nUnitFile,ifld,'Q' )
-      if(save_lamda2)call Write_XDMF_One(nUnitFile,ifld,'lamda2')
+    do ifld=ifirst-1,ilast,SaveVisu
+      write(iUnit,'(A,I10.10,A)')'    <Grid Name="T',ifld,'" GridType="Uniform">'
+      write(iUnit,'(A)')'      <Topology Reference="/Xdmf/Domain/Topology[1]"/>'
+      write(iUnit,'(A)')'      <Geometry Reference="/Xdmf/Domain/Geometry[1]"/>'
+      if(save_ux)     call Write_XDMF_One(iUnit,ifld,'ux', nxc_o, nyc_o, nzc_o)
+      if(save_uy)     call Write_XDMF_One(iUnit,ifld,'uy', nxc_o, nyc_o, nzc_o)
+      if(save_uz)     call Write_XDMF_One(iUnit,ifld,'uz', nxc_o, nyc_o, nzc_o)
+      if(save_pr)     call Write_XDMF_One(iUnit,ifld,'pr', nxc_o, nyc_o, nzc_o)
+      if(save_wx)     call Write_XDMF_One(iUnit,ifld,'wx', nxc_o, nyc_o, nzc_o)
+      if(save_wy)     call Write_XDMF_One(iUnit,ifld,'wy', nxc_o, nyc_o, nzc_o)
+      if(save_wz)     call Write_XDMF_One(iUnit,ifld,'wz', nxc_o, nyc_o, nzc_o)
+      if(save_wMag)   call Write_XDMF_One(iUnit,ifld,'wMag', nxc_o, nyc_o, nzc_o)
+      if(save_Q_vor)  call Write_XDMF_One(iUnit,ifld,'Q' , nxc_o, nyc_o, nzc_o)
+      if(save_lamda2) call Write_XDMF_One(iUnit,ifld,'lambda2', nxc_o, nyc_o, nzc_o)
 #ifdef ScalarFlow
-     if(save_scalar) call Write_XDMF_One(nUnitFile,ifld,'scalar') 
+     if(save_scalar) call Write_XDMF_One(iUnit,ifld,'scalar', nxc_o, nyc_o, nzc_o)
 #endif
-      write(nUnitFile,'(A)')'        </Grid>'
+      write(iUnit,'(A)')'    </Grid>'
     enddo
 
-    write(nUnitFile,'(A)')'    </Grid>'
-    write(nUnitFile,'(A)')'</Domain>'
-    write(nUnitFile,'(A)')'</Xdmf>'
-    close(nUnitFile,IOSTAT=ierror)
+    write(iUnit,'(A)')'  </Grid>'
+    write(iUnit,'(A)')'</Domain>'
+    write(iUnit,'(A)')'</Xdmf>'
+    close(iUnit,IOSTAT=ierr)
 #ifdef SaveNode
     call MainLog%OutInfo("Choose to save the visualizing file at grid node",2)
 #else
@@ -135,48 +180,47 @@ contains
 #endif
   end subroutine InitVisu
 
-  !******************************************************************
+  !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^80^^^^^^^^90
   ! Write_XDMF_One
-  !******************************************************************
-  subroutine Write_XDMF_One(nUnitFile, ifld,chAttribute)
-    implicit none
-    integer,intent(in)::nUnitFile,ifld
-    character(*),intent(in)::chAttribute
+  !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^80^^^^^^^^90
+  subroutine Write_XDMF_One(iUnit, ifld,chAttribute, nxc_o, nyc_o, nzc_o); implicit none
+    integer,intent(in)::iUnit, ifld, nxc_o, nyc_o, nzc_o
+    character(len=*),intent(in)::chAttribute
 
     ! locals
-    character(128)::chFile
-    integer::iprec=mytype_save
+    integer::iprec
+    character(len=:),allocatable::chFile
     
-    write(chFile,'(A,A,I10.10)')"VisuFor"//trim(RunName),"_"//trim(adjustl(chAttribute))//"_",ifld
-    write(nUnitFile,'(A)')'            <Attribute Name="'//trim(chAttribute)//'" Center="Node">'
-    write(nUnitFile,'(A,I1,A,3I7,A)')'                <DataItem Format="Binary" DataType="Float" Precision="',iprec,'" Endian="Native" Dimensions="',nzc,nyc,nxc,'">'
-    write(nUnitFile,'(A)')'                    '//trim(chFile)
-    write(nUnitFile,'(A)')'                </DataItem>'
-    write(nUnitFile,'(A)')'            </Attribute>'
-
+    iprec = mytype_save
+    chFile = "VisuFor" // strip(RunName_) // "_" // strip(chAttribute) // "_" // int2str(ifld,10)
+    write(iUnit,'(A)')'      <Attribute Name="'//trim(chAttribute)//'" Center="Node">'
+    write(iUnit,'(A,I1,A,3I7,A)')'        <DataItem Format="Binary" DataType="Float" Precision="',iprec,'" Endian="Native" Dimensions="', &
+                                 nzc_o, nyc_o, nxc_o, '">'
+    write(iUnit,'(A)')'          '//trim(chFile)
+    write(iUnit,'(A)')'        </DataItem>'
+    write(iUnit,'(A)')'      </Attribute>'
   end subroutine Write_XDMF_One
 
-  !******************************************************************
+  !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^80^^^^^^^^90
   ! dump_visu
-  !******************************************************************
+  !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^80^^^^^^^^90
 #ifdef ScalarFlow
-  subroutine dump_visu(ntime,ux,uy,uz,pressure,scalar,ArrTemp)
-    implicit none
+  subroutine dump_visu(ntime,ux,uy,uz,pressure,scalar,ArrTemp); implicit none
     real(RK),dimension(mb1%xmm:mb1%xpm,mb1%ymm:mb1%ypm,mb1%zmm:mb1%zpm),intent(in)::ux,uy,uz,pressure,scalar
 #else
-  subroutine dump_visu(ntime,ux,uy,uz,pressure,ArrTemp)
-    implicit none
+  subroutine dump_visu(ntime,ux,uy,uz,pressure,ArrTemp); implicit none
     real(RK),dimension(mb1%xmm:mb1%xpm,mb1%ymm:mb1%ypm,mb1%zmm:mb1%zpm),intent(in)::ux,uy,uz,pressure
 #endif
     real(RK),dimension(y1start(1):y1end(1),y1start(2):y1end(2),y1start(3):y1end(3)),intent(inout)::ArrTemp
     integer,intent(in)::ntime
 
     ! locals
-    character(128)::chFile
     integer::ic,jc,kc,ip,jp,kp,im,jm,km
+    character(len=:),allocatable::chFile
     real(RK)::dudy,dudz,dvdx,dvdz,dwdx,dwdy
     real(RK)::caj,cac1,cac2,cac12,vor_x,vor_y,vor_z
  
+    chFile = ' '
     ! ux
     if(save_ux) then
       do kc=y1start(3),y1end(3)
@@ -190,7 +234,7 @@ contains
           enddo
         enddo
       enddo
-      write(chFile,"(A,I10.10)") trim(ResultsDir)//"VisuFor"//trim(RunName)//"_ux_",ntime
+      chFile = strip(ResultsDir_) // "VisuFor" // strip(RunName_) // "_ux_" //int2str(ntime,10)
       call decomp_2d_write_every(y_pencil,ArrTemp,iskip,jskip,kskip,chFile,from1=.true.)
     endif
 
@@ -207,7 +251,7 @@ contains
           enddo
         enddo
       enddo
-      write(chFile,"(A,I10.10)") trim(ResultsDir)//"VisuFor"//trim(RunName)//"_uy_",ntime
+      chFile = strip(ResultsDir_) // "VisuFor" // strip(RunName_) // "_uy_" //int2str(ntime,10)
       call decomp_2d_write_every(y_pencil,ArrTemp,iskip,jskip,kskip,chFile,from1=.true.)
     endif
 
@@ -224,19 +268,19 @@ contains
           enddo
         enddo
       enddo
-      write(chFile,"(A,I10.10)") trim(ResultsDir)//"VisuFor"//trim(RunName)//"_uz_",ntime
+      chFile = strip(ResultsDir_) // "VisuFor" // strip(RunName_) // "_uz_" //int2str(ntime,10)
       call decomp_2d_write_every(y_pencil,ArrTemp,iskip,jskip,kskip,chFile,from1=.true.)
     endif
 
     ! pressure
     if(save_pr) then
-      write(chFile,"(A,I10.10)") trim(ResultsDir)//"VisuFor"//trim(RunName)//"_pr_",ntime
+      chFile = strip(ResultsDir_) // "VisuFor" // strip(RunName_) // "_pr_" //int2str(ntime,10)
       call decomp_2d_write_every(y_pencil,pressure(y1start(1):y1end(1),y1start(2):y1end(2),y1start(3):y1end(3)),iskip,jskip,kskip,chFile,from1=.true.)
     endif
 
 #ifdef ScalarFlow
     if(save_scalar) then
-      write(chFile,"(A,I10.10)") trim(ResultsDir)//"VisuFor"//trim(RunName)//"_scalar_",ntime
+      chFile = strip(ResultsDir_) // "VisuFor" // strip(RunName_) // "_scalar_" //int2str(ntime,10)
       call decomp_2d_write_every(y_pencil,scalar(y1start(1):y1end(1),y1start(2):y1end(2),y1start(3):y1end(3)),iskip,jskip,kskip,chFile,from1=.true.)
     endif
 #endif
@@ -261,7 +305,7 @@ contains
           enddo
         enddo
       enddo
-      write(chFile,"(A,I10.10)") trim(ResultsDir)//"VisuFor"//trim(RunName)//"_wx_",ntime
+      chFile = strip(ResultsDir_) // "VisuFor" // strip(RunName_) // "_wx_" //int2str(ntime,10)
       call decomp_2d_write_every(y_pencil,ArrTemp,iskip,jskip,kskip,chFile,from1=.true.)
     endif
 
@@ -280,7 +324,7 @@ contains
           enddo
         enddo
       enddo
-      write(chFile,"(A,I10.10)") trim(ResultsDir)//"VisuFor"//trim(RunName)//"_wy_",ntime
+      chFile = strip(ResultsDir_) // "VisuFor" // strip(RunName_) // "_wy_" //int2str(ntime,10)
       call decomp_2d_write_every(y_pencil,ArrTemp,iskip,jskip,kskip,chFile,from1=.true.)
     endif
 
@@ -305,7 +349,7 @@ contains
           enddo
         enddo
       enddo
-      write(chFile,"(A,I10.10)") trim(ResultsDir)//"VisuFor"//trim(RunName)//"_wz_",ntime
+      chFile = strip(ResultsDir_) // "VisuFor" // strip(RunName_) // "_wz_" //int2str(ntime,10)
       call decomp_2d_write_every(y_pencil,ArrTemp,iskip,jskip,kskip,chFile,from1=.true.)
     endif
 
@@ -345,78 +389,75 @@ contains
           enddo
         enddo
       enddo
-      write(chFile,"(A,I10.10)") trim(ResultsDir)//"VisuFor"//trim(RunName)//"_wMag_",ntime 
+      chFile = strip(ResultsDir_) // "VisuFor" // strip(RunName_) // "_wmag_" //int2str(ntime,10)
       call decomp_2d_write_every(y_pencil,ArrTemp,iskip,jskip,kskip,chFile,from1=.true.)
     endif
 
     ! Q
     if(save_Q_vor) then
       call Clc_Q_vor(ux,uy,uz,ArrTemp)
-      write(chFile,"(A,I10.10)") trim(ResultsDir)//"VisuFor"//trim(RunName)//"_Q_",ntime 
+      chFile = strip(ResultsDir_) // "VisuFor" // strip(RunName_) // "_Q_" //int2str(ntime,10) 
       call decomp_2d_write_every(y_pencil,ArrTemp,iskip,jskip,kskip,chFile,from1=.true.)
     endif  
   
    ! lamda2
    if(save_lamda2) then
      call Clc_lamda2(ux,uy,uz,ArrTemp)
-     write(chFile,"(A,I10.10)") trim(ResultsDir)//"VisuFor"//trim(RunName)//"_lamda2_",ntime 
+     chFile = strip(ResultsDir_) // "VisuFor" // strip(RunName_) // "_lambda2_" //int2str(ntime,10)
      call decomp_2d_write_every(y_pencil,ArrTemp,iskip,jskip,kskip,chFile,from1=.true.)
    endif
 
   end subroutine dump_visu
 
-  !**********************************************************************
+  !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^80^^^^^^^^90
   ! Delete_Prev_Restart
-  !**********************************************************************
-  subroutine Delete_Prev_Restart(ntime)
-    implicit none
+  !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^80^^^^^^^^90
+  subroutine Delete_Prev_Restart(ntime); implicit none
     integer,intent(in):: ntime
 
     ! locals
-    integer::nUnit,ierror
-    character(128)::chFile
+    integer::iUnit,ierr
+    character(len=:),allocatable::chFile
 
-    call MPI_BARRIER(MPI_COMM_WORLD,ierror)
+    call MPI_BARRIER(MPI_COMM_WORLD,ierr)
     if(nrank/=0) return
     !
-    write(chFile,"(A,I10.10)") trim(RestartDir)//"RestartFor"//trim(RunName),Prev_BackUp_itime
-    open(newunit=nUnit,file=trim(chFile),IOSTAT=ierror)
-    close(unit=nUnit,status='delete',IOSTAT=ierror)
-    ! 
-    write(chFile,"(A,I10.10)") trim(RestartDir)//"PrDataFor"//trim(RunName),Prev_BackUp_itime 
-    open(newunit=nUnit,file=trim(chFile),IOSTAT=ierror)
-    close(unit=nUnit,status='delete',IOSTAT=ierror)
+    chFile = strip(RestartDir_) // "RestartFor" // strip(RunName_) // int2str(Prev_BackUp_itime,10)
+    open(newunit=iUnit,file=chFile,IOSTAT=ierr)
+    close(unit=iUnit,status='delete',IOSTAT=ierr)
+    !
+    chFile = strip(RestartDir_) // "PrDataFor" // strip(RunName_) // int2str(Prev_BackUp_itime,10)
+    open(newunit=iUnit,file=chFile,IOSTAT=ierr)
+    close(unit=iUnit,status='delete',IOSTAT=ierr)
     ! 
     Prev_BackUp_itime = ntime
   end subroutine Delete_Prev_Restart
 
-  !******************************************************************
+  !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^80^^^^^^^^90
   ! write_restart
-  !******************************************************************
+  !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^80^^^^^^^^90
 #ifdef ScalarFlow
-  subroutine write_restart(ntime,ux,uy,uz,pressure,scalar,HistXOld,HistYOld,HistZOld,HistCOld)
-    implicit none
+  subroutine write_restart(ntime,ux,uy,uz,pressure,scalar,HistXOld,HistYOld,HistZOld,HistCOld); implicit none
     real(RK),dimension(mb1%xmm:mb1%xpm,mb1%ymm:mb1%ypm,mb1%zmm:mb1%zpm),intent(in)::ux,uy,uz,pressure,scalar
     real(RK),dimension(y1size(1),y1size(2),y1size(3)),intent(in):: HistXOld,HistYOld,HistZOld,HistCOld
 #else
-  subroutine write_restart(ntime,ux,uy,uz,pressure,HistXOld,HistYOld,HistZOld)
-    implicit none
+  subroutine write_restart(ntime,ux,uy,uz,pressure,HistXOld,HistYOld,HistZOld); implicit none
     real(RK),dimension(mb1%xmm:mb1%xpm,mb1%ymm:mb1%ypm,mb1%zmm:mb1%zpm),intent(in)::ux,uy,uz,pressure
     real(RK),dimension(y1size(1),y1size(2),y1size(3)),intent(in):: HistXOld,HistYOld,HistZOld
 #endif
     integer,intent(in)::ntime
     
     ! locals
-    integer::fh,ierror
-    character(128)::chFile
-    integer(kind=MPI_OFFSET_KIND)::disp,filesize
+    integer::fh,ierr
+    character(len=:),allocatable::chFile
+    integer(kind=MPI_OFFSET_KIND)::disp
 
     ! begin to write restart file
-    write(chFile,"(A,I10.10)") trim(RestartDir)//"RestartFor"//trim(RunName),ntime
-    call MPI_FILE_OPEN(MPI_COMM_WORLD, chFile, MPI_MODE_CREATE+MPI_MODE_WRONLY, MPI_INFO_NULL, fh, ierror)
-    filesize = 0_MPI_OFFSET_KIND
-    call MPI_FILE_SET_SIZE(fh,filesize,ierror)  ! guarantee overwriting
-    call MPI_BARRIER(MPI_COMM_WORLD,ierror)
+    chFile = strip(RestartDir_) // "RestartFor" // strip(RunName_) // int2str(ntime,10)
+    call MPI_FILE_OPEN(MPI_COMM_WORLD, chFile, MPI_MODE_CREATE+MPI_MODE_WRONLY, MPI_INFO_NULL, fh, ierr)
+    call MPI_BARRIER(MPI_COMM_WORLD,ierr)
+    call my_mpi_file_set_size(fh,0_MPI_OFFSET_KIND,ierr)  ! guarantee overwriting
+    call MPI_BARRIER(MPI_COMM_WORLD,ierr)
     disp = 0_MPI_OFFSET_KIND
 
     call decomp_2d_write_var(fh,disp,y_pencil,      ux(y1start(1):y1end(1),y1start(2):y1end(2),y1start(3):y1end(3))+uCRF)
@@ -434,48 +475,46 @@ contains
       call decomp_2d_write_var(fh,disp,y_pencil,HistCOld)
 #endif
     endif
-    call MPI_FILE_CLOSE(fh,ierror)
+    call MPI_FILE_CLOSE(fh,ierr)
 
     ! Write PrGradData
     if(IsUxConst .and. nrank==0) then
-      write(chFile,"(A,I10.10)") trim(RestartDir)//"PrDataFor"//trim(RunName),ntime
-      open(newunit=fh, file=chFile, status='replace', action='write', IOSTAT=ierror)
-      if(ierror/=0) then
-        call MainLog%CheckForError(ErrT_Abort,"write_restart","Cannot open file: "//trim(chFile))
+      chFile = strip(RestartDir_) // "PrDataFor" // strip(RunName_) // int2str(ntime,10)
+      open(newunit=fh, file=chFile, status='replace', action='write', IOSTAT=ierr)
+      if(ierr/=0) then
+        call MainLog%CheckForError(ErrT_Abort,"write_restart","Cannot open file: "//chFile)
       else
         write(fh,'(4ES26.17)') PrGradData(1:4)
       endif
-      close(fh,IOSTAT=ierror)
+      close(fh,IOSTAT=ierr)
     endif
   end subroutine write_restart
 
-  !******************************************************************
+  !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^80^^^^^^^^90
   ! read_restart
-  !******************************************************************
+  !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^80^^^^^^^^90
 #ifdef ScalarFlow
-  subroutine read_restart(ux,uy,uz,pressure,scalar,HistXOld,HistYOld,HistZOld,HistCOld)
-    implicit none
+  subroutine read_restart(ux,uy,uz,pressure,scalar,HistXOld,HistYOld,HistZOld,HistCOld); implicit none
     real(RK),dimension(mb1%xmm:mb1%xpm,mb1%ymm:mb1%ypm,mb1%zmm:mb1%zpm),intent(out)::ux,uy,uz,pressure,scalar
     real(RK),dimension(y1size(1),y1size(2),y1size(3)),intent(out):: HistXOld,HistYOld,HistZOld,HistCOld
 #else
-  subroutine read_restart(ux,uy,uz,pressure,HistXOld,HistYOld,HistZOld)
-    implicit none
+  subroutine read_restart(ux,uy,uz,pressure,HistXOld,HistYOld,HistZOld); implicit none
     real(RK),dimension(mb1%xmm:mb1%xpm,mb1%ymm:mb1%ypm,mb1%zmm:mb1%zpm),intent(out)::ux,uy,uz,pressure
     real(RK),dimension(y1size(1),y1size(2),y1size(3)),intent(out):: HistXOld,HistYOld,HistZOld
 #endif
 
     ! locals
-    character(128)::chFile
-    integer::fh,ierror,ntime
+    character(len=:),allocatable::chFile
+    integer::fh,ierr,ntime
     integer(kind=MPI_OFFSET_KIND)::disp,byte_total1,byte_total2,filebyte
 
     ! begin to write restart file
     ntime= ifirst - 1
-    write(chFile,"(A,I10.10)") trim(RestartDir)//"RestartFor"//trim(RunName),ntime
-    call MPI_FILE_OPEN(MPI_COMM_WORLD, chFile, MPI_MODE_RDONLY, MPI_INFO_NULL, fh, ierror)
-    if(ierror/=0 .and. nrank==0) call MainLog%CheckForError(ErrT_Abort,"Read_Restart","Cannot open file: "//trim(chFile))
+    chFile = strip(RestartDir_) // "RestartFor" // strip(RunName_) // int2str(ntime,10)
+    call MPI_FILE_OPEN(MPI_COMM_WORLD, chFile, MPI_MODE_RDONLY, MPI_INFO_NULL, fh, ierr)
+    if(ierr/=0 .and. nrank==0) call MainLog%CheckForError(ErrT_Abort,"Read_Restart","Cannot open file: "//chFile)
 
-    call MPI_FILE_GET_SIZE(fh,filebyte,ierror)
+    call MPI_FILE_GET_SIZE(fh,filebyte,ierr)
 #ifdef ScalarFlow
     byte_total1=int(mytype_bytes,8)*int(nxc,8)*int(nyc,8)*int(nzc,8)*9_MPI_OFFSET_KIND
     byte_total2=int(mytype_bytes,8)*int(nxc,8)*int(nyc,8)*int(nzc,8)*5_MPI_OFFSET_KIND
@@ -509,23 +548,23 @@ contains
       call decomp_2d_read_var(fh,disp,y_pencil,HistCOld)
 #endif
     endif
-    call MPI_FILE_CLOSE(fh,ierror)
+    call MPI_FILE_CLOSE(fh,ierr)
 
     ! Read PrGradData
     if(IsUxConst) then
-      write(chFile,"(A,I10.10)") trim(RestartDir)//"PrDataFor"//trim(RunName),ntime
-      open(newunit=fh, file=chFile, status='old', action='read', IOSTAT=ierror)
-      if(ierror/=0) then
+      chFile = strip(RestartDir_) // "PrDataFor" // strip(RunName_) // int2str(ntime,10)
+      open(newunit=fh, file=chFile, status='old', action='read', IOSTAT=ierr)
+      if(ierr/=0) then
         if(nrank==0) then
-          call MainLog%OutInfo("read_restart: Cannot open file "//trim(chFile),1)
+          call MainLog%OutInfo("read_restart: Cannot open file "// chFile,1)
           call MainLog%OutInfo(" PrGradData=0.0 will be used ! ",2)
         endif
         PrGradData=0.0_RK
       else
         read(fh,*) PrGradData(1:4)
       endif
-      close(fh,IOSTAT=ierror)
+      close(fh,IOSTAT=ierr)
     endif
   end subroutine read_restart
 
-end module m_IOAndVisu
+end module f4_IOAndVisu
