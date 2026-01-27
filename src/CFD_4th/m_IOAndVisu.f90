@@ -1,4 +1,3 @@
-#include "definitions_inc.f90"
 module f4_IOAndVisu
   use MPI
   use mc_TypeDef
@@ -456,7 +455,7 @@ contains
     chFile = strip(RestartDir_) // "RestartFor" // strip(RunName_) // int2str(ntime,10)
     call MPI_FILE_OPEN(MPI_COMM_WORLD, chFile, MPI_MODE_CREATE+MPI_MODE_WRONLY, MPI_INFO_NULL, fh, ierr)
     call MPI_BARRIER(MPI_COMM_WORLD,ierr)
-    call my_mpi_file_set_size(fh,0_MPI_OFFSET_KIND,ierr)  ! guarantee overwriting
+    call MPI_File_set_size(fh,0_MPI_OFFSET_KIND,ierr)  ! guarantee overwriting
     call MPI_BARRIER(MPI_COMM_WORLD,ierr)
     disp = 0_MPI_OFFSET_KIND
 
