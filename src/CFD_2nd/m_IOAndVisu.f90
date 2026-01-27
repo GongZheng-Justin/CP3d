@@ -1,4 +1,3 @@
-#include "definitions_inc.f90"
 module f2_IOAndVisu
   use MPI
   use mc_TypeDef
@@ -423,7 +422,7 @@ contains
     chFile = strip(RestartDir_)//"RestartFor"//strip(RunName_)// int2str(ntime,10)
     call MPI_FILE_OPEN(MPI_COMM_WORLD, chFile, MPI_MODE_CREATE+MPI_MODE_WRONLY, MPI_INFO_NULL, fh, ierr)
     call MPI_BARRIER(MPI_COMM_WORLD,ierr)
-    call my_mpi_file_set_size(fh,0_MPI_OFFSET_KIND,ierr)  ! guarantee overwriting
+    call MPI_File_set_size(fh,0_MPI_OFFSET_KIND,ierr)  ! guarantee overwriting
     call MPI_BARRIER(MPI_COMM_WORLD,ierr)
     disp = 0_MPI_OFFSET_KIND
     call decomp_2d_write_var(fh,disp,y_pencil,      ux(y1start(1):y1end(1),y1start(2):y1end(2),y1start(3):y1end(3)))
@@ -454,7 +453,7 @@ contains
     chFile = strip(RestartDir_)//"OutFlowFor"//strip(RunName_)// int2str(ntime,10)
     call MPI_FILE_OPEN(MPI_COMM_WORLD, chFile, MPI_MODE_CREATE+MPI_MODE_WRONLY, MPI_INFO_NULL, fh, ierr)
     call MPI_BARRIER(MPI_COMM_WORLD,ierr)
-    call my_mpi_file_set_size(fh,0_MPI_OFFSET_KIND,ierr)  ! guarantee overwriting
+    call MPI_File_set_size(fh,0_MPI_OFFSET_KIND,ierr)  ! guarantee overwriting
     call MPI_BARRIER(MPI_COMM_WORLD,ierr)
     call MPI_FILE_CLOSE(fh,ierr)
     disp = 0_MPI_OFFSET_KIND 
