@@ -1,12 +1,12 @@
-module f2_IOAndVisu
+module m_IOAndVisu
   use MPI
   use mc_TypeDef
   use mc_LogInfo
   use mc_Decomp2d
-  use f2_Parameters
-  use f2_MeshAndMetries
-  use f2_Tools,only: Clc_Q_vor,Clc_lamda2
-  use f2_Variables,only:mb1,OutFlowInfoX,OutFlowInfoY
+  use m_Parameters
+  use m_MeshAndMetries
+  use m_Tools,only: Clc_Q_vor,Clc_lamda2
+  use m_Variables,only:mb1,OutFlowInfoX,OutFlowInfoY
   implicit none
   private
 
@@ -643,4 +643,4 @@ contains
       enddo                      
     endif
   end subroutine read_restart
-end module f2_IOAndVisu
+end module m_IOAndVisu
