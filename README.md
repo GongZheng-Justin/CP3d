@@ -57,20 +57,20 @@ mpirun -n [np] [exeName] [inputFile1] [inputFile2]
 
 &emsp;For instance, if you want to run the lid-driven cavity case, you can type the following words in your terminal:
 ```
-mpirun -n 4 ./channel2nd ./Input/CFD_2nd/LidDrivenCavity.prm
+mpirun -n 4 ./channel2nd ./input/CFD_2nd/LidDrivenCavity.prm
 ```
 The following table provides examples to run CP3d after compilation:
 | Solver | Tying in terminal |
 | :--: | :-- |
-| dem | mpirun -n 8 ./dem ./Input/DEM/DEM_Settling.standard | 
-| channel2nd | mpirun -n 8 ./channel2nd ./Input/CFD_2nd/TurbCha0180_2nd.standard | 
-| channel4th | mpirun -n 8 ./channel4th ./Input/CFD_4th/TurbCha0180_4th.standard | 
-| channelLPT | mpirun -n 8 ./channelLPT ./Input/CFDLPT_OneWay/Channel4th_LPT.oneway ./Input/CFDLPT_OneWay/LPT_Channel4th.oneway | 
-| channelDEM | mpirun -n 8 ./channelDEM ./Input/CFDDEM/ParticleFalling/ChannelDEM_falling.case01 ./Input/CFDDEM/ParticleFalling/DEMChannel_falling.case01 | 
-| channelACM | mpirun -n 8 ./channelACM ./Input/ParticleFalling/SphereCate.cfd1 ./Input/ParticleFalling/SphereCate.acm | 
+| dem | mpirun -n 8 ./dem ./input/DEM/DEM_Settling.standard | 
+| channel2nd | mpirun -n 8 ./channel2nd ./input/CFD_2nd/TurbCha0180_2nd.standard | 
+| channel4th | mpirun -n 8 ./channel4th ./input/CFD_4th/TurbCha0180_4th.standard | 
+| channelLPT | mpirun -n 8 ./channelLPT ./input/CFDLPT_OneWay/Channel4th_LPT.oneway ./input/CFDLPT_OneWay/LPT_Channel4th.oneway | 
+| channelDEM | mpirun -n 8 ./channelDEM ./input/CFDDEM/ParticleFalling/ChannelDEM_falling.case01 ./input/CFDDEM/ParticleFalling/DEMChannel_falling.case01 | 
+| channelACM | mpirun -n 8 ./channelACM ./input/ParticleFalling/SphereCate.cfd1 ./input/ParticleFalling/SphereCate.acm | 
 
-### Input file
-&emsp;The input file examples are stored in the folder `./Input/`.
+### input file
+&emsp;The input file examples are stored in the folder `./input/`.
 
 ## Benchmarks :speedboat:
 ### One-way coupling
